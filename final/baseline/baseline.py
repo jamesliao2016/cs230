@@ -13,7 +13,7 @@ def import_data(filename):
 def pre_process(data):
 	for row in data[0:476]:
 		for field in row[2:]:
-			if not field == '':
+			if field:
 				field = field[1:]	# Remove first 'b'
 	return data
 
@@ -54,8 +54,8 @@ def main():
 	clsfr = train(train_sentiments, train_labels.astype('int'))
 	print("Training done.")
 	results = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
-	print(test_labels.mean())
-	print(results)
+	print("Test Label Mean: " + str(test_labels.mean()))
+	print("Results: " + str(results))
 	print("Avg = " + str(results.mean()))
 	print("Cross validation done.")
 	print("Done.")
