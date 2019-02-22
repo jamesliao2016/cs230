@@ -48,12 +48,15 @@ def add_avg_sentiment(data):
 
 def divide_train_test(data):
 	n_d = len(data)
-	p_traindev = int(n_d * 0.9)
-	p_devtest = p_traindev + n_d * 0.1
-	train = data[:p_traindev]
-	test = data[p_traindev:]
-	print("Train: {0}".format(len(train)))
-	print("Test: {0}".format(len(test)))
+	p_train = int(n_d * 0.9)
+	p_dev = p_train + int(n_d * 0.05)
+
+	train = data[:p_train]
+	dev = data[p_train:p_dev]
+	test = data[p_dev:]
+
+	print("Train: {0} / Dev: {1} / Test: {2}".format(len(train), len(dev), len(test)))
+
 	return train, test
 
 def train(data, labels):
