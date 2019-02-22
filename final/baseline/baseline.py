@@ -2,10 +2,28 @@ import numpy as np
 import pandas as pd
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
 from sklearn import svm
 from sklearn.model_selection import cross_val_score
 
+data_file = "Combined_News_DJIA.csv"
+
+def main():
+	data = import_data("./../data/" + data_file)
+	pre_processed = pre_process(data)
+	sentiment_included = add_avg_sentiment(pre_processed)
+
+	train_set, test_set = divide_train_test(sentiment_included)
+	train_labels = train_set[:,1].ravel()
+	train_sentiments = train_set[:,27].reshape(len(train_set), 1)
+	test_labels = test_set[:,1].ravel()
+	test_sentiments = test_set[:,27].reshape(len(test_set),1)
+
+	clsfr = train(train_sentiments, train_labels.astype('int'))
+	print("Training done.")
+	results = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
+	print("Test Label Mean: " + str(test_labels.mean()))
+	print("Results: " + str(results))
+	print("Avg sentiment: " + str(results.mean()))
 
 def import_data(filename):
 	return pd.read_csv(filename, header=0).fillna('').values
@@ -40,25 +58,6 @@ def train(data, labels):
 def cross_validate(data, labels, clsfr):
 	return cross_val_score(clsfr, data, labels, cv=5)
 
-def main():
-	data = import_data("./../data/Combined_News_DJIA.csv")
-	pre_processed = pre_process(data)
-	sentiment_included = add_avg_sentiment(pre_processed)
-
-	train_set, test_set = divide_train_test(sentiment_included)
-	train_labels = train_set[:,1].ravel()
-	train_sentiments = train_set[:,27].reshape(len(train_set), 1)
-	test_labels = test_set[:,1].ravel()
-	test_sentiments = test_set[:,27].reshape(len(test_set),1)
-
-	clsfr = train(train_sentiments, train_labels.astype('int'))
-	print("Training done.")
-	results = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
-	print("Test Label Mean: " + str(test_labels.mean()))
-	print("Results: " + str(results))
-	print("Avg = " + str(results.mean()))
-	print("Cross validation done.")
-	print("Done.")
 
 if __name__ == "__main__":
 	main()
