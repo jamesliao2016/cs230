@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
+\BOOKMARK [1][-]{section.3}{Architecture and Approach}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Contextual Embedding Layer}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Coattention Layer}{section.3}% 5
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Question and Document Encoder Sentinels}{subsection.3.2}% 6
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Coattention Encoder}{subsection.3.2}% 7
+\BOOKMARK [1][-]{section.4}{Experiments}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{Implementation and Metrics}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Hyperparameters}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.3}{Results}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.4}{Analysis of Examples}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Further Improvements}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Acknowledgments}{section.5}% 15
