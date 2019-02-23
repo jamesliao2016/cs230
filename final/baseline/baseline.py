@@ -35,7 +35,7 @@ def import_data(filename):
 
 def pre_process(data):
 	print("Preprocessing...")
-	# Remove the leading 'b"' in from of all lines
+	# Remove the leading 'b"' in front of all lines
 	for row in data[0:475]:
 		for field in row[2:]:
 			if field:
