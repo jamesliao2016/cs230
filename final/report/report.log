@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 FEB 2019 21:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  22 FEB 2019 22:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -916,52 +916,58 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
-<img/algo1.png, id=20, 424.58624pt x 291.0875pt>
+ [1
+
+{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<img/algo1.png, id=32, 424.58624pt x 291.0875pt>
 File: img/algo1.png Graphic file (type png)
 <use img/algo1.png>
-Package pdftex.def Info: img/algo1.png  used on input line 68.
+Package pdftex.def Info: img/algo1.png  used on input line 76.
 (pdftex.def)             Requested size: 212.2926pt x 145.54338pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [1
-
-{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-(/usr/local/texlive/2018/texmf-dist/tex/latex/listings/lstlang1.sty
+ [2 <./img/algo1.png>] (/usr/local/texlive/2018/texmf-dist/tex/latex/listings/l
+stlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <9> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 78.
- [2 <./img/algo1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 164.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 86.
  [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 164.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 172.
+ [4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 172.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 164.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 164.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 172.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 172.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: 003C5C4914E7BC0809A20B18587E9675;188.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 164.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 172.
  ) 
 Here is how much of TeX's memory you used:
- 21204 strings out of 492649
- 391520 string characters out of 6129622
- 598075 words of memory out of 5000000
+ 21206 strings out of 492649
+ 391538 string characters out of 6129622
+ 652035 words of memory out of 5000000
  24801 multiletter control sequences out of 15000+600000
  546079 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,8n,96p,10390b,2745s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 61i,8n,96p,10390b,2741s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2018/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2
-018/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2018/texm
-f-dist/fonts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2018/texmf-dist/
-fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type
-1/urw/times/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/time
-s/utmri8a.pfb>
-Output written on report.pdf (3 pages, 136873 bytes).
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texl
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texliv
+e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2
+018/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/20
+18/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2018/texmf
+-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2018/texmf-dist/fo
+nts/type1/urw/courier/ucrro8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/typ
+e1/urw/times/utmb8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/tim
+es/utmr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a
+.pfb>
+Output written on report.pdf (4 pages, 178375 bytes).
 PDF statistics:
- 171 PDF objects out of 1000 (max. 8388607)
- 156 compressed objects within 2 object streams
- 93 named destinations out of 1000 (max. 500000)
+ 196 PDF objects out of 1000 (max. 8388607)
+ 175 compressed objects within 2 object streams
+ 95 named destinations out of 1000 (max. 500000)
  38 words of extra memory for PDF output out of 10000 (max. 10000000)
 

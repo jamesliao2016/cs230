@@ -46,26 +46,35 @@ and individual company stock price predictions are planned to be included in the
 \section{Dataset Details}
 
 The DJIA dataset was provided through Kaggle (https://www.kaggle.com/aaron7sun/stocknews) and includes data points of nearly
-about 100,000 total examples (top 25 of news headlines extracted from news articles over a period of about 4,000 days). a dataset with 
+about 100,000 total examples (top 25 of news headlines for each day, extracted from news articles over a period of about 4,000 days).
 
 
 \section{Approach}
 
 The full dataset is split into train, dev, and test sets with distributions 80\%, 10\%, and 10\% respectively.
-Using NLTK's Sentiment Intensity Analyzer as a baseline model, it determined the average sentiment of the top 25 news headlines and scored a 55\% prediction rate. 
+Using NLTK's Sentiment Intensity Analyzer as a baseline model, it determined the average sentiment of the top 25 news headlines for each example and scored a 55\% prediction rate. 
 The main issue with the sentiment analysis approach is that the average sentiment may result in a loss of information which could be a reason for poor accuracy.
 In order to improve the prediction rate, the main architecture I will focus on implementing the Neural Tensor Network (NTN) combined with a CNN described in Ding et al 2015 (https://www.ijcai.org/Proceedings/15/Papers/329.pdf) for event-driven embedding.
-Also, gathering more data specific to particular companies/industries and predict the stock prices of these rather than only the generalized DJIA can provide more accurate results.
+Also, gathering more data specific to particular companies/industries and predicting the stock prices of these rather than only the generalized DJIA can provide more accurate results.
 For the NTN to be implemented, each headline needs to be transformed into an event tuple described in the NTN architecture.
-Some candidate options to be able to transform the headline tokens into the event tuple are to use
-ReVerb [Fader et al., 2011]
+Some candidate options to be able to transform the headline tokens into the event tuple are to use ReVerb [Fader et al., 2011]
 to extract the candidate tuples of the event then parse the sentence with ZPar [Zhang and Clark, 2011] to
-extract the subject, object and predicate.
+extract the subject, object, and predicate.
 Other possibilities include the spaCy API to extract relevant entities to supply for the event tuple.
+The resulting tuples to be used for training will have the structure $E=(O_1, P, O_2)$, where $O_1$ is the actor,
+$P$ is the action, and $O_2$ is the object on which the action is performed.
+The goal of relational database embedding is to be able to state whether two entities $(e1, e2)$ are in a certain relation $R$,
+so the NTN is able to address the case where $R$ is not symmetric.
+
+The loss function is described as
+\begin{align}
+  J(\Phi, E, E^r) = ReLU(1 - tanh(E) + tanh(E^r)) + \lambda||\Phi||^2_2
+\end{align}
 
 \begin{figure}%
   \hspace*{-1cm}%
   \includegraphics[scale=0.5]{img/algo1}
+  \caption{Training algorithm}
   \hspace*{-1cm}%
 \end{figure}
 
