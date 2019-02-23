@@ -35,10 +35,11 @@ def import_data(filename):
 
 def pre_process(data):
 	print("Preprocessing...")
-	for row in data[0:476]:
+	# Remove the leading 'b"' in from of all lines
+	for row in data[0:475]:
 		for field in row[2:]:
 			if field:
-				field = field[1:]	# Remove first 'b'
+				field = field[1:]
 	return data
 
 def analyze_sentiment(data):
