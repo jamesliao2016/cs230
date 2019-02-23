@@ -8,19 +8,24 @@ from sklearn.model_selection import cross_val_score
 data_file = "Combined_News_DJIA.csv"
 
 def main():
+	print("Importing data...")
 	data = import_data("./../data/" + data_file)
 	pre_processed = pre_process(data)
-	sentiment_included = add_avg_sentiment(pre_processed)
+	sentiment_included = analyze_sentiment(pre_processed)
 
-	train_set, test_set = divide_train_test(sentiment_included)
-	train_labels = train_set[:,1].ravel()
-	train_sentiments = train_set[:,27].reshape(len(train_set), 1)
-	test_labels = test_set[:,1].ravel()
-	test_sentiments = test_set[:,27].reshape(len(test_set),1)
+	train_set, test_set = split_dataset(sentiment_included)
 
+	train_labels = ravel_labels(train_set)
+	test_labels = ravel_labels(test_set)
+
+	train_sentiments = process_sentiments(train_set)
+	test_sentiments = process_sentiments(test_set)
+
+	print("Begin Training...")
 	clsfr = train(train_sentiments, train_labels.astype('int'))
-	print("Training done.")
+
 	results = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
+
 	print("Test Label Mean: " + str(test_labels.mean()))
 	print("Results: " + str(results))
 	print("Avg sentiment: " + str(results.mean()))
@@ -29,13 +34,15 @@ def import_data(filename):
 	return pd.read_csv(filename, header=0).fillna('').values
 
 def pre_process(data):
+	print("Preprocessing...")
 	for row in data[0:476]:
 		for field in row[2:]:
 			if field:
 				field = field[1:]	# Remove first 'b'
 	return data
 
-def add_avg_sentiment(data):
+def analyze_sentiment(data):
+	print("Analyzing sentiment...")
 	sid = SentimentIntensityAnalyzer()
 	avgs = np.empty((len(data),1))
 	for i in range(0,len(data)):
@@ -46,7 +53,7 @@ def add_avg_sentiment(data):
 		avgs[i] = avg
 	return np.append(data, avgs, axis=1)
 
-def divide_train_test(data):
+def split_dataset(data):
 	# Split 80/10/10
 	n_d = len(data)
 	p_train = int(n_d * 0.8)
@@ -61,12 +68,16 @@ def divide_train_test(data):
 	return train, test
 
 def train(data, labels):
-	print(labels.shape)
 	return svm.SVC(kernel='linear', C=1).fit(data, labels)
 
 def cross_validate(data, labels, clsfr):
 	return cross_val_score(clsfr, data, labels, cv=5)
 
+def ravel_labels(data):
+	return data[:,1].ravel()
+
+def process_sentiments(data):
+	return data[:,27].reshape(len(data), 1)
 
 if __name__ == "__main__":
 	main()
