@@ -65,10 +65,14 @@ Some candidate options to be able to transform the headline tokens into the even
 to extract the candidate tuples of the event then parse the sentence with ZPar [Zhang and Clark, 2011] to
 extract the subject, object, and predicate.
 Other possibilities include the spaCy API to extract relevant entities to supply for the event tuple.
-The resulting tuples to be used for training will have the structure $E=(O_1, P, O_2)$, where $O_1$ is the actor,
+The resulting event tuples to be used for training will have the structure $E=(O_1, P, O_2)$, where $O_1$ is the actor,
 $P$ is the action, and $O_2$ is the object on which the action is performed.
-The goal of relational database embedding is to be able to state whether two entities $(e1, e2)$ are in a certain relation $R$,
+The goal of relational database embedding is to be able to state whether two entities $(e_1, e_2)$ are in a certain relation $R$,
 so the NTN is able to address the case where $R$ is not symmetric.
+To achieve this, two tensors $T_1$ and $T_2$ are used
+to model the roles of $O_1$ and $O_2$, respectively. $O_1T_1P$ and
+$PT_2O_2$ are used to construct two role-dependent embeddings
+$R_1$ and $R_2$, respectively. A third tensor, $T_3$, is used for semantic compositionality over $R_1$ and $R_2$, and generate a complete structured embedding $U$ for $E = (O_1, P, O_2)$.
 
 The loss function evaluated on each training example is
 \begin{align}
@@ -76,6 +80,10 @@ The loss function evaluated on each training example is
 \end{align}
 where $E$ is the event tuple, $E^r$ is the corrupted tuple (randomly replaced event arg), $\Phi = (T_1, T_2, T_3, W, b)$
 is the set of trainable parameters, and the standard $L_2$ regularization $\lambda = 0.0001$.
+
+The parameters $\Phi$ are then updated to minimize the loss using the standard back-propagation algorithm
+though other optimization techniques such as Adam or RMSProp might be experimented with.
+
 
 % \begin{figure}%
 %   \hspace*{-1cm}%
