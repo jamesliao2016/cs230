@@ -32,27 +32,34 @@ Stanford University\\
 % \end{abstract}
 
 \section{Introduction}
-Generalized case of predicting the Dow Jones Industrial Average (DJIA), then focus on specific companies found in headlines
-for more accurate results.
-Due to time constraints, the baseline model for this milestone just contains the general DJIA predictions though the
-specific companies are planned to also be included in the finalized report.
+The financial market has been shown to be informationally efficient so stock prices reflect all known
+information and the price movement is in response to news or events [Fama, 1965].  
+Several Natural Language Processing (NLP) techniques have been applied over recent years to explore financial news for predicting market volatility,
+such as bags-of-words, noun phrases, named entities, and sentiment analysis [Kogan et al., 2009; Schumaker and Chen, 2009].
+For this project, we explore predicting the Dow Jones Industrial Average (DJIA) as well as the stock prices for some selected companies found in headlines.
+\\
+\textit{Note}: Due to time constraints, the baseline model for this milestone only contains the generalized DJIA prediction using the sentiment analysis approach.
+The alternate architectures (CNN, Neural Tensor Network [Ding, 2015], LSTM, GRU, etc.)
+and select companies stock price predictions are planned to be included in the finalized report.
 
 \section{Dataset Details}
-For DJIA, a dataset the with a top 25 of news headlines extracted from news articles.
+For DJIA, a dataset with the top 25 of news headlines extracted from news articles.
 The current data was provided through Kaggle (https://www.kaggle.com/aaron7sun/stocknews) and included data points over a period of roughly 8 years.
 
 \section{Approach}
+The data is first pre-processed to remove 
 Split the dataset train, dev, and test sets with distributions 80\%, 10\%, and 10\% respectively.
 Using NLTK's Sentiment Intensity Analyzer as a simple baseline model, it determined the average sentiment of the top 25 news headlines and scored a 55\% prediction rate. 
 Some other architectures 
 The main issue with this approach is that the average sentiment may result in a loss of information which could be a reason for poor accuracy.
-In order to improve the prediction rate, I plan to gather more data specific to particular companies/industries and predict the stock prices of these rather than only the generalized DJIA, as well as improving the architecture rather than the Sentiment Analyzer.
+In order to improve the prediction rate, I plan to gather more data specific to particular companies/industries and predict the stock prices of these rather than only the generalized DJIA, as well as using a more in-depth architecture than sentiment analysis from the NLTK Sentiment Analyzer.
 implement and experiment using LSTM/GRU cells, as well as the Neural Tensor Network (NTN) described in Ding et al 2015 (https://www.ijcai.org/Proceedings/15/Papers/329.pdf) for event-driven embedding.
 For the NTN to be implemented, each headline needs to be transformed into an event tuple described in the NTN architecture.
 Some candidate options to be able to transform the headline tokens into the event tuple are to use SpaCy's library
 I further plan to expand the dataset and combine it with 
 
 \section{Baseline Code}
+
 \begin{python}
 import numpy as np
 import pandas as pd
