@@ -5,11 +5,12 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn import svm
 from sklearn.model_selection import cross_val_score
 
+data_dir = "./../../data/" 
 data_file = "Combined_News_DJIA.csv"
 
 def main():
 	print("Importing data...")
-	data = import_data("./../data/" + data_file)
+	data = import_data(data_dir + data_file)
 	pre_processed = pre_process(data)
 	sentiment_included = analyze_sentiment(pre_processed)
 
