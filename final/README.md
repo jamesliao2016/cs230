@@ -173,7 +173,7 @@ This class is responsible for the tensorboard summary, in your trainer create a 
 
 
 This class also supports reporting to **Comet.ml** which allows you to see all your hyper-params, metrics, graphs, dependencies and more including real-time metric.
-Add your API key [in the configuration file](configs/example.json#L9):
+Add your API key [in the configuration file](src/configs/example.json#L9):
 
 For example: "comet_api_key": "your key here"
 
@@ -181,7 +181,7 @@ For example: "comet_api_key": "your key here"
 ### Comet.ml Integration
 This template also supports reporting to Comet.ml which allows you to see all your hyper-params, metrics, graphs, dependencies and more including real-time metric. 
 
-Add your API key [in the configuration file](configs/example.json#L9):
+Add your API key [in the configuration file](src/configs/example.json#L9):
 
 
 For example:  `"comet_api_key": "your key here"` 
