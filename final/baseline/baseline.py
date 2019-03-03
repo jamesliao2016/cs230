@@ -9,9 +9,13 @@ data_dir = "./../../data/"
 data_file = "Combined_News_DJIA.csv"
 
 def main():
+
+	# Data
 	print("Importing data...")
 	data = import_data(data_dir + data_file)
 	pre_processed = pre_process(data)
+
+	# Model
 	sentiment_included = analyze_sentiment(pre_processed)
 
 	train_set, test_set = split_dataset(sentiment_included)

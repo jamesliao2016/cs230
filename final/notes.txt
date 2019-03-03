@@ -1,5 +1,5 @@
-- Baseline
-- new repo
-- tf
-- tensor board
-- NTN : BaseModel
+1. Baseline : BaseModel
+2. interface with new repo : 
+3. tf
+4. tensor board
+5. NTN : BaseModel
