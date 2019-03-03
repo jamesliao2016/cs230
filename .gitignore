@@ -3,7 +3,9 @@ alt/
 *.log
 *.out
 experiments/
-.idea
+.idea/*
+.idea/workspace.xml
+data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

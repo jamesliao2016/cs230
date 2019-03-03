@@ -1,0 +1,3 @@
+[submodule "final/Stanford-OpenIE-Python"]
+	path = final/Stanford-OpenIE-Python
+	url = git@github.com:philipperemy/Stanford-OpenIE-Python.git
