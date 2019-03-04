@@ -5,7 +5,7 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from sklearn import svm
 from sklearn.model_selection import cross_val_score
 
-data_dir = "./../../data/" 
+data_dir = "../data/"
 data_file = "Combined_News_DJIA.csv"
 
 def main():
@@ -29,11 +29,11 @@ def main():
 	print("Begin Training...")
 	clsfr = train(train_sentiments, train_labels.astype('int'))
 
-	results = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
+	scores = cross_validate(test_sentiments, test_labels.astype('int'), clsfr)
 
 	print("Test Label Mean: " + str(test_labels.mean()))
-	print("Results: " + str(results))
-	print("Avg sentiment: " + str(results.mean()))
+	print("Scores: " + str(scores))
+	print("Avg score: " + str(scores.mean()))
 
 def import_data(filename):
 	return pd.read_csv(filename, header=0).fillna('').values
