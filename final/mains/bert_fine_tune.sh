@@ -1,7 +1,7 @@
 # Based on bert readme
 
-export BERT_BASE_DIR=./bert/uncased_L-12_H-768_A-12
-export GLUE_DIR=./glue_data
+export BERT_BASE_DIR=../bert/uncased_L-12_H-768_A-12
+export GLUE_DIR=../glue_data
 
 python run_classifier.py \
   --task_name=MRPC \
