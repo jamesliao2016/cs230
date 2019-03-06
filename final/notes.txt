@@ -1,5 +1,10 @@
-1. Baseline : BaseModel
-2. interface with new repo : 
-3. tf
-4. tensor board
-5. NTN : BaseModel
+BERT MRPC example on tensorboard
+
+Fine-tune and results on DJIA dataset
+
+
+---
+
+NTN model
+
+LSRM/CNN/GRU
