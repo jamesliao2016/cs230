@@ -2,11 +2,8 @@ alt/
 *.aux
 *.log
 *.out
-experiments/
 .idea/*
 .idea/workspace.xml
-glue_data/
-data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
