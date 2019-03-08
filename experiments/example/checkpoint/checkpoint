@@ -1,6 +1,2 @@
-model_checkpoint_path: "-110"
-all_model_checkpoint_paths: "-70"
-all_model_checkpoint_paths: "-80"
-all_model_checkpoint_paths: "-90"
-all_model_checkpoint_paths: "-100"
-all_model_checkpoint_paths: "-110"
+model_checkpoint_path: "-120"
+all_model_checkpoint_paths: "-120"

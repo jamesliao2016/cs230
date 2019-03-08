@@ -1,9 +1,6 @@
-[submodule "final/Stanford-OpenIE-Python"]
-	path = final/Stanford-OpenIE-Python
-	url = git@github.com:philipperemy/Stanford-OpenIE-Python.git
-[submodule "final/final/bert"]
-	path = final/final/bert
-	url = git@github.com:google-research/bert.git
-[submodule "final/bert"]
-	path = final/bert
-	url = git@github.com:google-research/bert.git
+[submodule "Stanford-OpenIE-Python"]
+	path = Stanford-OpenIE-Python
+	url = https://github.com/philipperemy/Stanford-OpenIE-Python.git
+[submodule "bert"]
+	path = bert
+	url = https://github.com/google-research/bert.git

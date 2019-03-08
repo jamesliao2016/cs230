@@ -1,0 +1,176 @@
+\subsection*{Formula}
+\includegraphics[width=\linewidth]{matrixderiv.png}
+\includegraphics[width=\linewidth]{matrixderivfunc.png}
+
+\subsection*{Backprop}
+1. Identify intermediate functions (forward prop)
+2. Compute local gradients
+3. Combine with downstream error signal to get full gradient
+\includegraphics[width=\linewidth]{backprop.png}
+\includegraphics[width=\linewidth]{backprop2.png}
+
+\subsection*{Gradient Descent}
+$\theta^{new}=\theta^{old}-\alpha\nabla_\theta J(\theta)$
+. Minibatches from Stochastic Gradient Descent.
+The exploding gradient
+problem refers to the large increase in the norm
+of the gradient during training. Such events are due to
+the explosion of the long term components, which can
+grow exponentially more than short term ones. The
+vanishing gradients problem refers to the opposite behaviour,
+when long term components go exponentially
+fast to norm 0, making it impossible for the model to
+learn correlation between temporally distant events.
+
+\subsection*{word2vec}
+\includegraphics[width=\linewidth]{word2vec.png}
+\includegraphics[width=\linewidth]{word2veccbow.png}
+\includegraphics[width=\linewidth]{word2veccbow2.png}
+\includegraphics[width=\linewidth]{word2vecskipgram.png}
+\includegraphics[width=\linewidth]{word2vecskipgram2.png}
+
+\subsection*{GloVe}
+\includegraphics[width=\linewidth]{glove.png}
+\includegraphics[width=\linewidth]{glove2.png}
+\includegraphics[width=\linewidth]{glove3.png}
+\includegraphics[width=\linewidth]{glove4.png}
+
+\subsection*{NN}
+\includegraphics[width=\linewidth]{loss.png}
+\includegraphics[width=\linewidth]{matrixcalc.png}
+\includegraphics[width=\linewidth]{overfitting.png}
+\includegraphics[width=\linewidth]{techniques.png}
+\includegraphics[width=\linewidth]{underfitting.png}
+
+
+\subsection*{Learning/Training}
+The train loss always decreases whether the model is overfitting
+or underfitting. If the step size is too small, the convergence is too slow, but
+the training loss will still go down. If the step size is too large, it may cause a
+bouncing effect because we skip and overshoot the optimal solution. This leads
+to increase in training loss and decrease in training accuracy.
+\includegraphics[width=\linewidth]{learning.png}
+\includegraphics[width=\linewidth]{learning2.png}
+
+\subsection*{RNN}
+\includegraphics[width=\linewidth]{RNN2.png}
+\includegraphics[width=\linewidth]{RNN3.png}
+\includegraphics[width=\linewidth]{RNN4.png}
+\includegraphics[width=\linewidth]{RNN5.png}
+\includegraphics[width=\linewidth]{RNN6.png}
+\includegraphics[width=\linewidth]{RNN7.png}
+\includegraphics[width=\linewidth]{RNN8.png}
+\includegraphics[width=\linewidth]{RNNbackprop.png}
+\includegraphics[width=\linewidth]{GRU.png}
+\includegraphics[width=\linewidth]{GRUqa1.png}
+\includegraphics[width=\linewidth]{GRUqa2.png}
+\includegraphics[width=\linewidth]{LSTM.png}
+\includegraphics[width=\linewidth]{LSTMqa1.png}
+\includegraphics[width=\linewidth]{LSTMqa2.png}
+\includegraphics[width=\linewidth]{LSTMqa3.png}
+
+\subsection*{Misc Facts}
+Because \textbf{ReLU} activations are linear, they do not saturate for
+large (positive) values, and hence freely allow gradients to change weights
+in the network. However, they do not solve the problem for large negative
+weights and ReLU units can “die” if a gradient update moves parameters
+into the flat region.
+
+The \textbf{max margin loss} is 0 when $s−s_c>1$
+
+The main advantage of \textbf{neural dependency parsers} is that they offer a dense representation instead of a spare representation of the parser. Neural and traditional parsers are not different in what input information they can use, or what kinds of parses they can output (both can output any parse), but they differ in their representation of the features they use.
+
+Just like sparse representations, word2vec or GloVe do not have representations for \textbf{unseen words} and hence do not help in generalization.
+Models using dense word vectors generalize better to \textbf{rare words} than those using sparse vectors.
+
+\textbf{Dense} word vectors encode similarity between words while sparse vectors do not, and are easier to include as features in machine learning systems than sparse vectors.
+
+\textbf{RNNs} can handle a sequence of arbitrary length, while feedforward neural networks can not.
+
+Training \textbf{RNNs} is hard because of vanishing and exploding gradient problems.
+
+\textbf{Gradient clipping} is only a solution for solving exploding gradient problems, not vanishing gradient ones.
+
+Gated recurrent units (\textbf{GRUs}) have fewer parameters than \textbf{LSTMs}.
+
+The \textbf{loss function} for a multi-layer neural network is non-convex and hence SGD is only guaranteed to converge to a local optimum.
+
+A RIGHT-ARC must be used to link ROOT to a dependent
+
+\textbf{SGD} results in noisier convergence plots compared to \textbf{batch gradient descent}.
+
+Can the \textbf{neural dependency parser} we learned in class correctly parse the sentence “John saw a dog yesterday which was a Yorkshire terrier.”? // No. The sentence has a non-projective parse: yesterday is a dependent of saw, while the phrase “which was a Yorkshire terrier” is a dependent of “dog”.
+
+Name at least two types of features that would be helpful to provide as input to a neural dependency parser and explain why. // Here are some useful features that are indicative of transition decisions:
+• Taking word vectors for ns words from the top of the stack. Helps identify
+• Taking word vectors for nb words from the top of the buffer.
+• Taking vector representations for words’ POS tags. Helps disam-
+biguate the role of the word or word sense.
+• Taking vector representations for words’ arc-labels.
+
+\textbf{AdaGrad}:
+	$cache_i =& cache_i + (\nabla_\theta_iL)^2; \\
+	\theta_i =& \theta_i - \eta \nabla_\theta_iL/(\sqrt{cache_i}+\epsilon)$
+Adagrad has a decreasing step-size. This allows parameters to change quickly at first and then converge.
+Also has different per-element stepsizes. This allows parameters with small gradients to change more quickly than those with large step-sizes.
+
+What would the gradient of the \textbf{sigmoid} be with respect to an input that is very large? // Because the sigmoid is almost flat for very large values, its gra- dient will be almost 0.
+
+Why might this be a problem for \textbf{training} neural networks? //
+If weights become saturated during a particular training epoch, the small gradients make it very hard to change weights thereafter: in other words, it makes training much much slower.
+
+How does the \textbf{ReLU} activation ReLU(z) = max(0, z) solve this problem? //
+Because ReLU activations are linear, they do not saturate for large (positive) values, and hence freely allow gradients to change weights in the network. However, they do not solve the problem for large negative weights and ReLU units can “die” if a gradient update moves parameters into the flat region.
+
+Name at least one benefit of the \textbf{LSTM} model over the \textbf{bag-of-vectors} model. //
+The LSTM model is able to integrate information from word ordering, e.g. “this was not an amazing fantastic movie” while the bag-of-vectors model can not.
+
+If we chose to update our word vectors when training the LSTM model on sentiment classification data, how would these word vectors differ from ones not updated during training? Explain with an example. Assume that the word vectors of the LSTM model were initialized using GloVe or word2vec. //
+The word vectors learned using this method can capture more sentiment information. In the word2vec models that depend on co-occurrence counts, words like ‘good’ or ‘bad’ have very similar representations; repre- sentations learned through a sentiment classifier would learn different em- beddings.
+
+State two important differences between NNLM the CBOW model we learned in class. Explain how each might affect the word vectors learned. //
+The CBOW is trained to predict a center word given a context window that extends on both sides, while word vectors learned by NNLM do not capture the context to the right of the word. Thus, the NNLM may not differentiate “word (carefully)” from “word (puzzle)”.
+The CBOW model simply uses the sum of context words, while the NNLM model combines context words non-linearly. Thus the NNLM can learn to treat “not good to” differently from “good to not”, etc.
+
+$x=[x_1,...,x_n] \\
+h=tanh(Wx+b) \\
+\hat y=softmax(Uh+d) \\
+J=CE(y,\hat y) \\
+$
+\includegraphics[width=\linewidth]{NNLM2.png}
+//
+What is the complexity of forward propagation in an NNLM for a single training example? //
+The forward propagation complexity for an NNLM is N × D for concatenating the word vectors, N × D × H to compute h and H × V to compute yˆ from h: in total, O(NDH + HV ). Typically, V >> ND, so the latter term dominates the forward propagation computation.
+
+Give at least one example of how the sentiment predictions made by an \textbf{autoencoder} model would differ from one made using a bag-of-vectors model like the one in assignment 1. //
+The autoencoder model described above allows us to predict that “not bad” is actually neutral or positive, while the bag-of-vectors model would predict a more negative class.
+
+--
+\includegraphics[width=\linewidth]{autoencoder1.png}
+\includegraphics[width=\linewidth]{autoencoder2.png}
+\includegraphics[width=\linewidth]{autoencoder3.png}
+--
+
+\includegraphics[width=\linewidth]{parser.png}
+
+Why	is	the	vanishing	gradient	a	problem? //
+We	cannot	tell	whether
+1. No	dependency	between	t and	t+n in	data,	or
+2. Wrong	configuration	of	parameters
+
+You	can	improve	the	Vanishing	Gradient	Problem	with	good
+initialization	and	ReLUs
+
+\textbf{LSTMs} useful for lots of data.
+
+\includegraphics[width=\linewidth]{gruvan.png}
+\includegraphics[width=\linewidth]{z1.png}
+
+In the LSTM, the output gate is for how much the memory cell is exposed in the hidden state. There is still a dependency between ct and ht. When you get want to get an output from step t, we would typically use the hidden state and apply a softmax to it (i.e. $softmax(h_tW+b)$.
+
+-- Why combine softmax and CE in TensorFlow graph? //
+Recall that the gradient of J with respect to the unexponentiated inputs to CE node is $\hat y − y$.
+This is very easy to compute.
+We also give full credits to these reasons:
+1. Don’t have to first take exp and then take log. Improve numerical stability.
+2. y is one hot so we only need to compute $\hat y_k$ where k is the correct label.

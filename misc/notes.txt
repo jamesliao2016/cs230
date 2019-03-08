@@ -1,0 +1,10 @@
+BERT MRPC example on tensorboard
+
+Fine-tune and results on DJIA dataset
+
+
+---
+
+NTN model
+
+LSRM/CNN/GRU
