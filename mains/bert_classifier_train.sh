@@ -3,6 +3,7 @@
 export BERT_HOME_DIR=../bert
 export BERT_BASE_DIR=../bert_data/uncased_L-12_H-768_A-12
 export GLUE_DIR=../glue_data
+export TRAIN_OUTPUT_DIR=../experiments/train
 
 name="$1"
 if (( $# <= 0 )); then
@@ -22,4 +23,4 @@ python $BERT_HOME_DIR/run_classifier.py \
   --train_batch_size=32 \
   --learning_rate=2e-5 \
   --num_train_epochs=3.0 \
-  --output_dir=/tmp/"$name"_output/
+  --output_dir="$TRAIN_OUTPUT_DIR"

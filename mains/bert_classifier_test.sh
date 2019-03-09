@@ -3,9 +3,9 @@
 export BERT_HOME_DIR=../bert
 export BERT_BASE_DIR=../bert_data/uncased_L-12_H-768_A-12
 export GLUE_DIR=../glue_data
+export TEST_OUTPUT_DIR=../experiments/test
 
 name="$1"
-
 if (( $# <= 0 )); then
   echo 'Error: Provide task name arg'
   exit 1
@@ -19,4 +19,4 @@ python $BERT_HOME_DIR/run_classifier.py \
   --bert_config_file=$BERT_BASE_DIR/bert_config.json \
   --init_checkpoint=$TRAINED_CLASSIFIER \
   --max_seq_length=128 \
-  --output_dir=/tmp/"$name"_output/
+  --output_dir="$TEST_OUTPUT_DIR"
