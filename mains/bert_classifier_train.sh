@@ -5,7 +5,7 @@ export BERT_BASE_DIR=../bert_data/uncased_L-12_H-768_A-12
 export GLUE_DIR=../glue_data
 
 name="$1"
-export OUTPUT_DIR=../experiments/bert/"$name"
+export OUTPUT_DIR=../experiments/bert/"$name"/
 
 if (( $# <= 0 )); then
   echo 'Error: Provide task name arg'
