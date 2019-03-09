@@ -3,9 +3,10 @@
 export BERT_HOME_DIR=../bert
 export BERT_BASE_DIR=../bert_data/uncased_L-12_H-768_A-12
 export GLUE_DIR=../glue_data
-export TRAIN_OUTPUT_DIR=../experiments/train
 
 name="$1"
+export OUTPUT_DIR=../experiments/bert/"$name"
+
 if (( $# <= 0 )); then
   echo 'Error: Provide task name arg'
   exit 1
@@ -23,4 +24,4 @@ python $BERT_HOME_DIR/run_classifier.py \
   --train_batch_size=32 \
   --learning_rate=2e-5 \
   --num_train_epochs=3.0 \
-  --output_dir="$TRAIN_OUTPUT_DIR"
+  --output_dir="$OUTPUT_DIR"
