@@ -6,7 +6,6 @@ export GLUE_DIR=../glue_data
 name="$1"
 export OUTPUT_DIR=../experiments/bert/"$name"/
 
-name="$1"
 if (( $# <= 0 )); then
   echo 'Error: Provide task name arg'
   exit 1
