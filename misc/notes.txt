@@ -1,3 +1,11 @@
+What U relations on given day determine market price that day?
+
+want to find P_r(R| P,H), so use Pairwise Text Classification 
+
+___
+
+
+
 BERT MRPC example on tensorboard
 
 Fine-tune and results on DJIA dataset
