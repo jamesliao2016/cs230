@@ -14,6 +14,7 @@ fi
 
 python $BERT_HOME_DIR/run_classifier.py \
   --task_name="$name" \
+  --do_lower=False \
   --do_train=true \
   --do_eval=true \
   --data_dir=$GLUE_DIR/"$name" \

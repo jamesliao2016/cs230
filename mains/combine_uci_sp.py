@@ -14,11 +14,18 @@ djia_file = f'{data_dir}/DJIA_table.csv'
 whitelist = set('abcdefghijklmnopqrstuvwxyz 0123456789.,;\'-:?')
 
 def main():
+    news = filter_news()
+    combine_news_djia()
+    write_output(news)
+
+
+def combine_news_djia(header="date\ttitle\thostname\tcategory"):
+
+
+def filter_news(header="date\ttitle\thostname\tcategory"):
+    rows = [header]
     with open(news_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-
-        rows = ["date\ttitle\thostname\tcategory"]
-
         for idx, row in enumerate(csv_reader):
             if idx > 100:
                 break
@@ -28,8 +35,7 @@ def main():
             else:
                 cleaned = process_news(row)
                 rows.append(cleaned)
-
-    write_output(rows)
+    return rows
 
 
 def write_output(rows, out_file=f'{data_dir}/result.tsv'):
