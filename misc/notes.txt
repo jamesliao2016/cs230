@@ -3,18 +3,27 @@ Which entities and their events cause the most effect for market fluctuation, ov
 Learn the language of headlines, group by day
 
 
+Heuristic #1: Most influential have similarity 
+- Max pooling of each day, STS-B similarity with prev day
 
 
-D x S -> X -> f(W.X + b) -> h1 -> softmax(h1) ->
+
+
+Sentiment models to try:
+	BERT (Pre-trained),
+	BOW,
+	GAN (generated unlabeled),
+
+D x S x k -> X -> f(W.X + b) -> h1 -> softmax(h1) ->
 ...n hidden -> sigmoid(hn) -> 
 where 
 	d = day
-	D = num days
-	S = num sentence per day
-	W = N.N 
-	b = 
+	D = num days (d e D is batch size)
+	S = num sentence per day  # plot bar distrib on each day
+	k = words in each sentence
+	W = N.N.k 
 	X = flattened sentence embeddings
-	Y = [0,1]  # softmax based on most influential sentence (by BOW) of day
+	Y = [0,1]  # softmax sentiment based on most influential sentence (by BOW) of day
 
    flatten                 ->
 

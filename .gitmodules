@@ -4,3 +4,6 @@
 [submodule "bert"]
 	path = bert
 	url = https://github.com/rjalmo/bert.git
+[submodule "sentiment-discovery"]
+	path = sentiment-discovery
+	url = https://github.com/NVIDIA/sentiment-discovery.git
