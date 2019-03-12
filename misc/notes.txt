@@ -1,6 +1,41 @@
+Which entities and their events cause the most effect for market fluctuation, over short/long term?
+
+Learn the language of headlines, group by day
+
+
+
+
+D x S -> X -> f(W.X + b) -> h1 -> softmax(h1) ->
+...n hidden -> sigmoid(hn) -> 
+where 
+	d = day
+	D = num days
+	S = num sentence per day
+	W = N.N 
+	b = 
+	X = flattened sentence embeddings
+	Y = [0,1]  # softmax based on most influential sentence (by BOW) of day
+
+   flatten                 ->
+
+Sentiment of Bag-of-words model on multiset ADJ
+
+s e S
+NER
+s -> (E1, sentiment(ADJ), E2)
+Bag of Words
+
+
+
+___
+
+combine test results, 
+group by date
+
+___
+
 What U relations on given day determine market price that day?
 
-want to find P_r(R| P,H), so use Pairwise Text Classification 
 
 ___
 
