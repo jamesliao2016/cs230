@@ -1,7 +1,7 @@
 # Based on bert readme
 
 export BERT_HOME_DIR=../bert
-export BERT_BASE_DIR=../bert_data/uncased_L-12_H-768_A-12
+export BERT_BASE_DIR=../bert_data/cased_L-12_H-768_A-12
 export GLUE_DIR=../glue_data
 name="$1"
 export OUTPUT_DIR=../experiments/bert/"$name"/
