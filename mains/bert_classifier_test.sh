@@ -13,6 +13,7 @@ fi
 
 python $BERT_HOME_DIR/run_classifier.py \
   --task_name="$name" \
+  --do_lower_case=False \
   --do_predict=true \
   --data_dir=$GLUE_DIR/"$name" \
   --vocab_file=$BERT_BASE_DIR/vocab.txt \
