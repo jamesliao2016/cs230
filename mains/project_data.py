@@ -25,20 +25,21 @@ def main():
     embed = hub.Module(module_url)
     print('Finished getting Hub Module')
 
-    run_embed(embed, headlines)
+    headline_embeddings = run_embed(embed, headlines)
+    write_output(headline_embeddings)
+
+
+def write_output(headline_embeddings):
+    with open('embedding_results.csv', 'w') as f:
+        for i, hemb in enumerate(np.array(headline_embeddings).tolist()):
+            hemb_snippet = ", ".join((str(x) for x in hemb))
+            f.write("{}\n".format(hemb_snippet))
 
 
 def run_embed(embed, headlines):
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        headline_embeddings = session.run(embed(headlines))
-
-        for i, hemb in enumerate(np.array(headline_embeddings).tolist()):
-            print("Message: {}".format(headlines[i]))
-            print("Embedding size: {}".format(len(hemb)))
-            hemb_snippet = ", ".join(
-                (str(x) for x in hemb[:3]))
-            print("Embedding: [{}, ...]\n".format(hemb_snippet))
+        return session.run(embed(headlines))
 
 
 def iter_csv(file_name, task_indexed):
