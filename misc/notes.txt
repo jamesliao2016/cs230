@@ -1,3 +1,11 @@
+What is the impact of this headline that contributes to determine increase of the market? And given a collection of headlines when combined together determines to increase market?
+
+sentence embedding -> knowledge of learned features (FNN/CNN/RNN?) -> tanh (impact) -> reduce sum -> sigmoid (market increase yes or no)
+
+
+___
+
+
 Which entities and their events cause the most effect for market fluctuation, over short/long term?
 
 Learn the language of headlines, group by day
