@@ -2,6 +2,7 @@
 # # Process data from sources
 
 
+import os
 import tensorflow as tf
 import tensorflow_hub as hub
 import numpy as np
@@ -15,6 +16,8 @@ news_file = '../data/uci-news-aggregator.csv'
 
 
 def main():
+    os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
+
     news = read_news()
     headlines = [n[1] for n in news[1:]]
 
