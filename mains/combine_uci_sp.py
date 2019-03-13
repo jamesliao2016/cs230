@@ -14,7 +14,7 @@ whitelist = set('abcdefghijklmnopqrstuvwxyz 0123456789.,;\'-:?')
 
 def main():
     djia, sp = read_djia_sp()
-    news = filter_news(djia, sp)
+    news = read_news(djia, sp)
     write_output(news)
 
 
@@ -47,7 +47,7 @@ def process_sp(sp, row):
     sp[date] = close
 
 
-def filter_news(djia, sp, header="date\ttitle\thostname\tcategory\tdjia_close\tsp_close"):
+def read_news(djia, sp, header="date\ttitle\thostname\tcategory\tdjia_close\tsp_close"):
     rows = [header]
     with open(news_file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -69,7 +69,7 @@ def write_output(rows, out_file=f'{data_dir}/result.tsv'):
     t = '\t'
     with open(out_file, 'w') as f:
         for idx, r in enumerate(rows):
-            f.write(f"{r if idx == 0 else t.join(r)}\n")
+            f.write(f"{t.join(r) if idx != 0 else r}\n")
 
 
 def process_news(djia, sp, row):
