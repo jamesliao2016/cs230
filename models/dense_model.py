@@ -2,11 +2,8 @@ from base.base_model import BaseModel
 
 import tensorflow as tf
 
-from tensorflow.keras.layers import Dense
-from tensorflow.nn import tanh
-from tensorflow.nn import relu
-
-from utils.utils import assert_shape
+from keras.models import Sequential
+from keras.layers import Dense
 
 
 class DenseModel(BaseModel):
@@ -32,7 +29,7 @@ class DenseModel(BaseModel):
 
         # as first layer in a sequential model:
         model = Sequential()
-        model.add(Dense(100, input_shape=(512,), activation='relu'))
+        model.add(Dense(128, input_shape=(None, 512), activation='relu'))
         model.add(Dense(1, activation='sigmoid'))
 
 
