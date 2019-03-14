@@ -3,6 +3,7 @@ from keras.layers import Dense
 from keras.callbacks import ModelCheckpoint
 
 import numpy as np
+import pandas as pd
 
 # fix random seed for reproducibility
 np.random.seed(7)
@@ -13,7 +14,7 @@ n_embed = 512
 def main():
     # load csv with combined news headlines, deltas as labels
     # label, delta_tmrw, embedding(512)
-    dataset = np.loadtxt("data/market_headline_embeddings_small.tsv", delimiter='\t')
+    dataset = pd.read_table("data/market_headline_embeddings_small.tsv")
 
     # split into input (X) and output (Y) variables
     labels, deltas, embeddings = partition_data(dataset)
