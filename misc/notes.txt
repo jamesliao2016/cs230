@@ -1,10 +1,32 @@
 What is the impact of this headline that contributes to determine increase of the market? And given a collection of headlines when combined together determines the market increase?
 
-sentence embedding -> knowledge of learned features (FNN/CNN/RNN?) -> tanh (impact) -> reduce sum -> sigmoid (market increase yes or no)
+Emb e R^512
 
+
+Emb(S) -> NN knowledge of learned features (FNN/CNN/RNN?) -> tanh (impact) -> reduce sum -> sigmoid (market increase yes or no)
+
+
+baseline:
+
+
+get baseline working
 
 ___
 
+Future:
+softmax based on heuristic that embeddings have most evaluated impact
+
+
+time
+D = 10 x 12 x 365
+D = ymd
+conv
+
+
+ß x D x E -> 
+
+
+___
 
 Which entities and their events cause the most effect for market fluctuation, over short/long term?
 
@@ -21,6 +43,7 @@ Sentiment models to try:
 	BERT (Pre-trained),
 	BOW,
 	GAN (generated unlabeled),
+
 
 D x S x k -> X -> f(W.X + b) -> h1 -> softmax(h1) ->
 ...n hidden -> sigmoid(hn) -> 

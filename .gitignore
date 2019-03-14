@@ -5,6 +5,10 @@ alt/
 .idea/*
 .idea/workspace.xml
 
+# large data
+data/embedding_results.csv
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
