@@ -49,13 +49,13 @@ def main():
 
 def load_embeddings(headlines):
     print('Loading embeddings...')
-    # return np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
-    result = get_headline_embeddings(headlines)
+    result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
+    # result = fetch_headline_embeddings(headlines)
     print('Finished loading embeddings')
     return result
 
 
-def get_headline_embeddings(headlines):
+def fetch_headline_embeddings(headlines):
     module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
