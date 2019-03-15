@@ -29,7 +29,6 @@ def main():
     # create model
     model = Sequential()
     model.add(Dense(128, input_shape=(None, n_embed), activation='relu'))
-    model.add(Flatten())
     model.add(Dense(1, activation='sigmoid'))
 
     # Compile model
