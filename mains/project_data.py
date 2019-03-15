@@ -47,17 +47,9 @@ def run_embed(embed, headlines):
         return session.run(embed(headlines))
 
 
-def iter_csv(file_name, task_indexed):
-    with open(file_name) as f:
-        csv_reader = csv.reader(f, delimiter=',')
-        for idx, row in enumerate(csv_reader):
-            if idx != 0:
-                task_indexed(idx, row)
-
-
 def read_news():
-    with open(data_file) as csv_file:
-        return list(csv.reader(csv_file, delimiter=','))
+    with open(data_file) as f:
+        return list(csv.reader(f, delimiter='\t'))
 
 
 if __name__ == "__main__":
