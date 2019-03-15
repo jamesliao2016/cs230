@@ -18,10 +18,12 @@ def main():
     # load csv with combined news headlines, deltas as labels
     # label, delta, embedding(512)
 
-    embeddings = np.loadtxt(embeddings_file, delimiter=', ')
+    print('Loading embeddings...')
+    embeddings = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
+    print('Finished loading embeddings')
 
     dataset = pd.read_table(dataset_file)
-    labels = dataset['sp_label']
+    labels = dataset['sp_label'].values
 
     # create model
     model = Sequential()
