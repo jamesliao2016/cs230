@@ -10,14 +10,18 @@ np.random.seed(7)
 
 n_embed = 512
 
+data_dir = '../data'
+dataset_file = '{}/combined_result.tsv'.format(data_dir)
+embeddings_file = '{}/embedding_results.csv'.format(data_dir)
 
 def main():
     # load csv with combined news headlines, deltas as labels
     # label, delta, embedding(512)
-    dataset = pd.read_table("data/market_headline_embeddings_small.tsv")
 
-    # split into input (X) and output (Y) variables
-    labels, deltas, embeddings = partition_data(dataset)
+    embeddings = np.loadtxt(embeddings_file, delimiter=', ')
+
+    dataset = pd.read_table(dataset_file)
+    labels = dataset['sp_label']
 
     # create model
     model = Sequential()
@@ -25,7 +29,6 @@ def main():
     model.add(Dense(1, activation='sigmoid'))
 
     # Compile model
-    # TODO will require functional model when adding delta as loss
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # checkpoint
@@ -39,13 +42,6 @@ def main():
     # evaluate the model
     scores = model.evaluate(embeddings, labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
-
-def partition_data(dataset):
-    labels = dataset[:, 0]
-    deltas = dataset[:, 1]
-    embeddings = dataset[:, 2:]
-    return labels, deltas, embeddings
 
 
 if __name__ == '__main__':
