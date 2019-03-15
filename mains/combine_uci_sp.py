@@ -49,8 +49,13 @@ def process_stock(stock, row):
     }
 
 
-def read_news(djia, sp, ):
+def get_existing_dates(djia, sp):
+    return set(djia.keys()).intersection(set(sp.keys()))
+
+
+def read_news(djia, sp):
     news_rows = [out_header]
+    existing_dates = get_existing_dates(djia, sp)
     with open(news_file) as f:
         next(f)
         csv_reader = csv.reader(f)
@@ -60,8 +65,10 @@ def read_news(djia, sp, ):
             if idx > 10000:
                 break
 
-            cleaned = process_news(djia, sp, row)
-            news_rows.append(cleaned)
+            processed = process_news(existing_dates, djia, sp, row)
+            if processed is not None:
+                news_rows.append(processed)
+
     return news_rows
 
 
@@ -71,11 +78,18 @@ def write_output(rows):
             f.write('{}\n'.format('\t'.join(r) if idx != 0 else r))
 
 
-def process_news(djia, sp, row):
+def process_news(existing_dates, djia, sp, row):
+    """
+    Can return None if not in existing_dates
+    """
     id, title, url, publisher, category, story, hostname, timestamp = row
     date = convert_time(timestamp)
-    return date, normalize_headline(title), hostname, category, djia[date]['label'], djia[date]['delta'], sp[date][
+
+    if date in existing_dates:
+        return date, normalize_headline(title), hostname, category, djia[date]['label'], djia[date]['delta'], sp[date][
         'label'], sp[date]['delta']
+    else:
+        return None
 
 
 def convert_time(timestamp):

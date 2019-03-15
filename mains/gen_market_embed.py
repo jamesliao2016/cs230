@@ -31,9 +31,8 @@ def main():
     news_final = res[mask]
 
     stocks = concat_label_delta(djia_sp)
-    news_final['TIMESTAMP'].apply(
-        lambda row: __findStockChange(row, stocks)).astype(np.int32)
 
+    print('done')
     # output = pd.concat(news_final, stocks[]['djia_label'])
     # output.to_csv(out_file,
     #               sep='\t',
@@ -57,7 +56,7 @@ def convert_time(timestamp):
 def __findStockChange(row, dataset):
     currentstockDay = dataset[dataset['Date'] == row]
     if not currentstockDay.empty:
-        return currentstockDay.iloc[0]['Close'] > currentstockDay.iloc[0]['Open']
+        return currentstockDay.iloc[0]['djia_close'] > currentstockDay.iloc[0]['djia_open']
     else:
         return False
 
