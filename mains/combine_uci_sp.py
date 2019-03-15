@@ -11,7 +11,7 @@ news_file = '{}/uci-news-aggregator.csv'.format(data_dir)
 djia_file = '{}/DJIA_2014.csv'.format(data_dir)
 sp_file = '{}/SP_2014.csv'.format(data_dir)
 out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
-out_file = '{}/result.tsv'.format(data_dir)
+out_file = '{}/combined_result.tsv'.format(data_dir)
 
 
 def main():

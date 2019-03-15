@@ -9,10 +9,12 @@ import numpy as np
 import csv
 
 
+
 # ## Convert headlines to embeddings
 
-news_file = '../data/uci-news-aggregator.csv'
-# news_file = '../data/uci-news-aggregator_small.csv'
+data_file = '../data/combined_result.tsv'
+small_data_file = '../data/combined_result_small.tsv'
+out_file = '../data/embedding_results.csv'
 
 
 def main():
@@ -33,7 +35,7 @@ def main():
 
 
 def write_output(headline_embeddings):
-    with open('embedding_results.csv', 'w') as f:
+    with open(out_file, 'w') as f:
         for i, hemb in enumerate(np.array(headline_embeddings).tolist()):
             hemb_snippet = ", ".join((str(x) for x in hemb))
             f.write("{}\n".format(hemb_snippet))
@@ -54,7 +56,7 @@ def iter_csv(file_name, task_indexed):
 
 
 def read_news():
-    with open(news_file) as csv_file:
+    with open(data_file) as csv_file:
         return list(csv.reader(csv_file, delimiter=','))
 
 
