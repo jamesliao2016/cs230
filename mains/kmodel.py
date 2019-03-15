@@ -1,10 +1,11 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+import tensorflow_hub as hub
+
 from keras.models import Sequential
 from keras.layers import Dense, Flatten
 from keras.callbacks import ModelCheckpoint, TensorBoard
-from mains.project_data import get_headline_embeddings
-
-import numpy as np
-import pandas as pd
 
 # fix random seed for reproducibility
 np.random.seed(7)
@@ -55,6 +56,23 @@ def load_embeddings(headlines):
     result = get_headline_embeddings(headlines)
     print('Finished loading embeddings')
     return result
+
+
+def get_headline_embeddings(headlines):
+    module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
+
+    # Import the Universal Sentence Encoder's TF Hub module
+    print('Getting Hub Module')
+    embed = hub.Module(module_url)
+    print('Finished getting Hub Module')
+
+    return run_embed(embed, headlines)
+
+
+def run_embed(embed, headlines):
+    with tf.Session() as session:
+        session.run([tf.global_variables_initializer(), tf.tables_initializer()])
+        return session.run(embed(headlines))
 
 
 if __name__ == '__main__':
