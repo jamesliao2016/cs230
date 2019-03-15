@@ -4,7 +4,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 from keras.models import Sequential
-from keras.layers import Dense, Flatten
+from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D
 from keras.callbacks import ModelCheckpoint, TensorBoard
 
 # fix random seed for reproducibility
@@ -14,10 +14,10 @@ data_dir = '../data'
 dataset_file = '{}/combined_result.tsv'.format(data_dir)
 embeddings_file = '{}/embedding_results.csv'.format(data_dir)
 
-def main():
-    # load csv with combined news headlines, deltas as labels
-    # label, delta, embedding(512)
+tb_log_dir = '../experiments/univ'
 
+
+def main():
     dataset = pd.read_table(dataset_file)
     headlines = dataset['title'].values
     labels = dataset['sp_label'].values
@@ -26,7 +26,16 @@ def main():
 
     # create model
     model = Sequential()
-    model.add(Dense(128, input_dim=512, activation='relu'))
+    model.add(Dense(256, input_dim=512, activation='relu'))
+    model.add(Dropout(0.2))
+    # convolution layers
+    model.add(Conv1D(nb_filter=32,
+                     filter_length=4,
+                     border_mode='valid',
+                     activation='relu'))
+    model.add(MaxPooling1D(pool_length=2))
+    model.add(Dropout(0.2))
+    # output
     model.add(Dense(1, activation='sigmoid'))
 
     # Compile model
