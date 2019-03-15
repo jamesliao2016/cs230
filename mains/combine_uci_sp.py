@@ -13,6 +13,8 @@ sp_file = '{}/SP_2014.csv'.format(data_dir)
 out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
 out_file = '{}/combined_result.tsv'.format(data_dir)
 
+char_whitelist = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,;\'-:?')
+
 
 def main():
     djia, sp = read_djia_sp()
@@ -94,7 +96,10 @@ def convert_time(timestamp):
 
 def normalize_headline(row):
     # Delete useless character strings
-    return row.replace('\t', '')
+    result = row.replace('...', '')
+    result = ''.join(filter(char_whitelist.__contains__, result))
+    return result
+    # Delete useless character strings
 
 
 if __name__ == "__main__":
