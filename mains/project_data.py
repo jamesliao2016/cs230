@@ -16,13 +16,16 @@ data_file = '../data/combined_result.tsv'
 small_data_file = '../data/combined_result_small.tsv'
 out_file = '../data/embedding_results.csv'
 
+os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
+
 
 def main():
-    os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
-
     news = read_news()
     headlines = [n[1] for n in news[1:]]
+    get_headline_embeddings(headlines)
 
+
+def get_headline_embeddings(headlines):
     module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
@@ -30,8 +33,8 @@ def main():
     embed = hub.Module(module_url)
     print('Finished getting Hub Module')
 
-    headline_embeddings = run_embed(embed, headlines)
-    write_output(headline_embeddings)
+    return run_embed(embed, headlines)
+    # write_output(headline_embeddings)
 
 
 def write_output(headline_embeddings):
