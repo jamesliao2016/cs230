@@ -14,7 +14,8 @@ data_dir = '../data'
 dataset_file = '{}/combined_result.tsv'.format(data_dir)
 embeddings_file = '{}/embedding_results.csv'.format(data_dir)
 
-tb_log_dir = '../experiments/univ'
+model_name = 'conv1d'
+tb_log_dir = '../experiments/univ/{}'.format(model_name)
 
 
 def main():
@@ -44,7 +45,7 @@ def main():
     # checkpoint
     filepath = "weights.best.hdf5"
     checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-    tb_callback = TensorBoard(log_dir='./Graph', histogram_freq=0, write_graph=True, write_images=True)
+    tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
     callbacks_list = [checkpoint, tb_callback]
 
