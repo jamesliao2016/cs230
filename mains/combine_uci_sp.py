@@ -7,9 +7,11 @@ import csv
 import datetime
 
 data_dir = '../data'
-news_file = f'{data_dir}/uci-news-aggregator.csv'
-
-whitelist = set('abcdefghijklmnopqrstuvwxyz 0123456789.,;\'-:?')
+news_file = '{}/uci-news-aggregator.csv'.format(data_dir)
+djia_file = '{}/DJIA_2014.csv'.format(data_dir)
+sp_file = '{}/SP_2014.csv'.format(data_dir)
+out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
+out_file = '{}/result.tsv'.format(data_dir)
 
 
 def main():
@@ -18,66 +20,62 @@ def main():
     write_output(news)
 
 
-def read_djia_sp(djia_file=f'{data_dir}/DJIA_table.csv', sp_file=f'{data_dir}/SP_table.csv'):
+def read_djia_sp():
     # Date to close
     djia = {}
     sp = {}
 
-    iter_csv(djia_file, lambda idx, row: process_djia(djia, row))
-    iter_csv(sp_file, lambda idx, row: process_sp(sp, row))
+    iter_csv(djia_file, lambda row: process_stock(djia, row))
+    iter_csv(sp_file, lambda row: process_stock(sp, row))
 
     return djia, sp
 
 
 def iter_csv(file_name, task_indexed):
     with open(file_name) as f:
-        csv_reader = csv.reader(f, delimiter=',')
-        for idx, row in enumerate(csv_reader):
-            if idx != 0:
-                task_indexed(idx, row)
+        next(f)
+        csv_reader = csv.reader(f)
+        for row in csv_reader:
+            task_indexed(row)
 
 
-def process_djia(djia, row):
-    date, _open, high, low, close, volume, adj_close = row
-    djia[date] = close
-
-
-def process_sp(sp, row):
+def process_stock(stock, row):
     date, _open, high, low, close, adj_close, volume = row
-    sp[date] = close
+    delta = float(_open) - float(close)
+    label = int(delta > 0)
+    stock[date] = {
+        'delta': str('{0:.6f}'.format(delta)),
+        'label': str(label)
+    }
 
 
-def read_news(djia, sp, header="date\ttitle\thostname\tcategory\tdjia_close\tsp_close"):
-    rows = [header]
-    with open(news_file) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
+def read_news(djia, sp, ):
+    news_rows = [out_header]
+    with open(news_file) as f:
+        next(f)
+        csv_reader = csv.reader(f)
         for idx, row in enumerate(csv_reader):
 
             # REMOVE
             if idx > 10000:
                 break
 
-            if idx == 0:
-                print(f'Column names are {", ".join(row)}')
-            else:
-                cleaned = process_news(djia, sp, row)
-                rows.append(cleaned)
-    return rows
+            cleaned = process_news(djia, sp, row)
+            news_rows.append(cleaned)
+    return news_rows
 
 
-def write_output(rows, out_file=f'{data_dir}/result.tsv'):
-    t = '\t'
+def write_output(rows):
     with open(out_file, 'w') as f:
         for idx, r in enumerate(rows):
-            f.write(f"{t.join(r) if idx != 0 else r}\n")
+            f.write('{}\n'.format('\t'.join(r) if idx != 0 else r))
 
 
 def process_news(djia, sp, row):
-    """Return format: date,title,hostname,category,DJIA_Close,SP_Close"""
-
     id, title, url, publisher, category, story, hostname, timestamp = row
     date = convert_time(timestamp)
-    return date, normalize_headline(title), hostname, category, djia[date], sp[date]
+    return date, normalize_headline(title), hostname, category, djia[date]['label'], djia[date]['delta'], sp[date][
+        'label'], sp[date]['delta']
 
 
 def convert_time(timestamp):
@@ -86,11 +84,8 @@ def convert_time(timestamp):
 
 
 def normalize_headline(row):
-    result = row.lower()
     # Delete useless character strings
-    result = result.replace('...', '')
-    result = ''.join(filter(whitelist.__contains__, result))
-    return result
+    return row.replace('"', '')
 
 
 if __name__ == "__main__":
