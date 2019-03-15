@@ -94,7 +94,7 @@ def convert_time(timestamp):
 
 def normalize_headline(row):
     # Delete useless character strings
-    return row.replace('"', '').replace('\t', '')
+    return row.replace('\t', '')
 
 
 if __name__ == "__main__":
