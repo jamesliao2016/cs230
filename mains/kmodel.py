@@ -1,6 +1,6 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
+from keras.models import Sequential
+from keras.layers import Dense, Flatten
+from keras.callbacks import ModelCheckpoint, TensorBoard
 
 import numpy as np
 import pandas as pd
@@ -25,6 +25,7 @@ def main():
 
     # create model
     model = Sequential()
+    model.add(Flatten())
     model.add(Dense(128, input_shape=(None, n_embed), activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
 
@@ -39,7 +40,7 @@ def main():
     callbacks_list = [checkpoint, tb_callback]
 
     # Fit the model
-    model.fit(embeddings, labels, validation_split=0.2, epochs=150, batch_size=10, callbacks=callbacks_list)
+    model.fit(embeddings, labels, validation_split=0.2, epochs=200, batch_size=32, callbacks=callbacks_list)
 
     # evaluate the model
     scores = model.evaluate(embeddings, labels)
