@@ -10,8 +10,6 @@ from keras.callbacks import ModelCheckpoint, TensorBoard
 # fix random seed for reproducibility
 np.random.seed(7)
 
-n_embed = 512
-
 data_dir = '../data'
 dataset_file = '{}/combined_result.tsv'.format(data_dir)
 embeddings_file = '{}/embedding_results.csv'.format(data_dir)
@@ -28,7 +26,7 @@ def main():
 
     # create model
     model = Sequential()
-    model.add(Dense(128, input_shape=(None, n_embed), activation='relu'))
+    model.add(Dense(128, input_shape=(None, 345591, 512), activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
 
     # Compile model
