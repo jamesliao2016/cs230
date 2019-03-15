@@ -39,7 +39,7 @@ def main():
     callbacks_list = [checkpoint, tb_callback]
 
     # Fit the model
-    model.fit(embeddings, labels, epochs=150, batch_size=10, callbacks=callbacks_list)
+    model.fit(embeddings, labels, validation_split=0.2, epochs=150, batch_size=10, callbacks=callbacks_list)
 
     # evaluate the model
     scores = model.evaluate(embeddings, labels)
