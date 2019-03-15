@@ -60,11 +60,6 @@ def read_news(djia, sp):
         next(f)
         csv_reader = csv.reader(f)
         for idx, row in enumerate(csv_reader):
-
-            # REMOVE
-            if idx > 10000:
-                break
-
             processed = process_news(existing_dates, djia, sp, row)
             if processed is not None:
                 news_rows.append(processed)
