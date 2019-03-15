@@ -49,8 +49,8 @@ def main():
 
 def load_embeddings(headlines):
     print('Loading embeddings...')
-    result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
-    # result = fetch_headline_embeddings(headlines)
+    # result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
+    result = fetch_headline_embeddings(headlines)
     print('Finished loading embeddings')
     return result
 
