@@ -21,7 +21,7 @@ def main():
     # label, delta, embedding(512)
 
     dataset = pd.read_table(dataset_file)
-    headlines = dataset['headline'].values
+    headlines = dataset['title'].values
     labels = dataset['sp_label'].values
 
     embeddings = load_embeddings(headlines)
