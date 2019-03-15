@@ -13,7 +13,7 @@ n_embed = 512
 
 def main():
     # load csv with combined news headlines, deltas as labels
-    # label, delta_tmrw, embedding(512)
+    # label, delta, embedding(512)
     dataset = pd.read_table("data/market_headline_embeddings_small.tsv")
 
     # split into input (X) and output (Y) variables
