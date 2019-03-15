@@ -1,6 +1,6 @@
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, TensorBoard
 
 import numpy as np
 import pandas as pd
@@ -34,7 +34,9 @@ def main():
     # checkpoint
     filepath = "weights.best.hdf5"
     checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-    callbacks_list = [checkpoint]
+    tb_callback = TensorBoard(log_dir='./Graph', histogram_freq=0, write_graph=True, write_images=True)
+
+    callbacks_list = [checkpoint, tb_callback]
 
     # Fit the model
     model.fit(embeddings, labels, epochs=150, batch_size=10, callbacks=callbacks_list)
