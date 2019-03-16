@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -17,7 +18,9 @@ dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_off
 embeddings_file = '{}/embedding_results{}.csv'.format(data_dir, '_small' if DEBUG else '')
 
 model_name = 'day_offset_{}'.format(day_offset)
-tb_log_dir = '../experiments/univ/{}'.format(model_name)
+tb_log_dir = '../experi1fb57c3ffe1a38479233ee9853ddd7a8ac8a8c47.descriptor.txtments/univ/{}'.format(model_name)
+
+os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
 
 
 def main():
@@ -35,7 +38,7 @@ def main():
 
     # create model
     model = Sequential()
-    model.add(Dense(128, input_dim=512, activation='relu', bias_initializer='zeros'))
+    model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros'))
     model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
 
     # Compile model
