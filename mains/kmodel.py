@@ -33,8 +33,7 @@ def main():
     dev_labels = dev_set['sp_label'].values
 
     # input
-    train_embeddings = load_embeddings(train_set['title'].values)
-    dev_embeddings = load_embeddings(dev_set['title'].values)
+    train_embeddings, dev_embeddings = load_embeddings(train_set['title'].values, dev_set['title'].values)
 
     # create model
     model = Sequential()
@@ -65,15 +64,15 @@ def penalized_loss(noise):
     return loss
 
 
-def load_embeddings(headlines):
+def load_embeddings(test, dev):
     print('Loading embeddings...')
     # result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
-    result = fetch_headline_embeddings(headlines)
+    result = fetch_headline_embeddings(test, dev)
     print('Finished loading embeddings')
     return result
 
 
-def fetch_headline_embeddings(headlines):
+def fetch_headline_embeddings(test, dev):
     module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/3"  # @param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
@@ -81,13 +80,13 @@ def fetch_headline_embeddings(headlines):
     embed = hub.Module(module_url)
     print('Finished getting Hub Module')
 
-    return run_embed(embed, headlines)
+    return run_embed(embed, test, dev)
 
 
-def run_embed(embed, headlines):
+def run_embed(embed, test, dev):
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        return session.run(embed(headlines))
+        return session.run([embed(test), embed(dev)])
 
 
 def split_train_dataset(dataset):
