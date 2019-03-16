@@ -87,7 +87,7 @@ def fetch_headline_embeddings(headlines):
 def run_embed(embed, headlines):
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        reduced = headlines[:len(headlines)/4]
+        reduced = headlines[:int(len(headlines)/4)]
         return session.run(embed(reduced))
 
 
