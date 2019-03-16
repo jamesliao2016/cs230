@@ -31,6 +31,7 @@ def main():
 
     # input
     train_embeddings = load_embeddings(train_set['title'].values)
+    dev_embeddings = load_embeddings(dev_set['title'].values)
 
     # create model
     model = Sequential()
@@ -51,7 +52,7 @@ def main():
     model.fit(train_embeddings, train_labels, epochs=200, batch_size=32, callbacks=callbacks_list)
 
     # evaluate the model
-    scores = model.evaluate(dev_set, dev_labels)
+    scores = model.evaluate(dev_embeddings, dev_labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
 
