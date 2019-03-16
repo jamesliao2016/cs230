@@ -8,7 +8,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D
 from keras.callbacks import ModelCheckpoint, TensorBoard
 
-DEBUG = True
+DEBUG = False
 
 day_offset = 2
 
@@ -38,7 +38,7 @@ def main():
     model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
 
     # Compile model
-    model.compile(loss=[penalized_loss(noise=output2), penalized_loss(noise=output1)], optimizer='rmsprop', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # checkpoint
     filepath = "weights.best.hdf5"
