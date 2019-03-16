@@ -69,7 +69,7 @@ def load_embeddings(headlines):
 
 
 def fetch_headline_embeddings(headlines):
-    module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
+    module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/3" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
     print('Getting Hub Module')
@@ -80,9 +80,10 @@ def fetch_headline_embeddings(headlines):
 
 
 def run_embed(embed, headlines):
+    e = embed(headlines)
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        return session.run(embed(headlines))
+        return session.run(e)
 
 
 def split_train_dataset(dataset):
