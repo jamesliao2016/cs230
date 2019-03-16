@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow_hub as hub
+import keras.backend as K
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D
@@ -37,7 +38,7 @@ def main():
     model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
 
     # Compile model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss=[penalized_loss(noise=output2), penalized_loss(noise=output1)], optimizer='rmsprop', metrics=['accuracy'])
 
     # checkpoint
     filepath = "weights.best.hdf5"
@@ -52,6 +53,12 @@ def main():
     # evaluate the model
     scores = model.evaluate(dev_set, dev_labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+
+
+def penalized_loss(noise):
+    def loss(y_true, y_pred):
+        return K.mean(K.square(y_pred - y_true) - K.square(y_true - noise), axis=-1)
+    return loss
 
 
 def load_embeddings(headlines):

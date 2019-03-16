@@ -6,14 +6,14 @@
 import csv
 from datetime import datetime, date, time, timedelta
 
+day_label_offset = 2
+
 data_dir = '../data'
 news_file = '{}/uci-news-aggregator.csv'.format(data_dir)
 djia_file = '{}/DJIA_2014.csv'.format(data_dir)
 sp_file = '{}/SP_2014.csv'.format(data_dir)
 
-day_label_offset = 2
-
-out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
+out_header = "date\ttitle\thostname\tcategory\tday_label_offset\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
 out_file = '{}/combined_result_day_offset_{}.tsv'.format(data_dir, day_label_offset)
 
 char_whitelist = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,;\'-:?')
@@ -55,7 +55,7 @@ def process_stock(stock, row):
 
 
 def get_existing_dates(djia, sp):
-    return set(djia.keys()).intersection(set(sp.keys()))
+    return set([datetime.strptime(k, '%Y-%m-%d').date() for k in sp.keys()])
 
 
 def read_news(djia, sp):
@@ -86,13 +86,23 @@ def process_news(existing_dates, djia, sp, row):
     id, title, url, publisher, category, story, hostname, timestamp = row
     dt_date = datetime.fromtimestamp(int(timestamp) / 1000)
     date = dt_date.strftime('%Y-%m-%d')
-    date_offset = (dt_date + timedelta(days=day_label_offset)).strftime('%Y-%m-%d')
+    date_offset, label_offset = get_next_existing_date_offset(dt_date, existing_dates)
 
-    if date_offset in existing_dates:
+    if dt_date.date() in existing_dates:
         return date, normalize_headline(title), hostname, category,\
+               str(label_offset),\
                djia[date_offset]['label'], djia[date_offset]['delta'], sp[date_offset][ 'label'], sp[date_offset]['delta']
     else:
         return None
+
+
+def get_next_existing_date_offset(dt_start, existing_dates):
+    offset = dt_start + timedelta(days=day_label_offset)
+    count = 0
+    while offset.date() not in existing_dates:
+        count += 1
+        offset += timedelta(days=1)
+    return offset.strftime('%Y-%m-%d'), day_label_offset + count
 
 
 def normalize_headline(row):
