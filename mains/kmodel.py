@@ -2,17 +2,20 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow_hub as hub
-import datetime as dt
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D
 from keras.callbacks import ModelCheckpoint, TensorBoard
 
-data_dir = '../data'
-dataset_file = '{}/combined_result.tsv'.format(data_dir)
-embeddings_file = '{}/embedding_results.csv'.format(data_dir)
+DEBUG = True
 
-model_name = 'day_offset_2'
+day_offset = 2
+
+data_dir = '../data'
+dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_offset, '_small' if DEBUG else '')
+embeddings_file = '{}/embedding_results{}.csv'.format(data_dir, '_small' if DEBUG else '')
+
+model_name = 'day_offset_{}'.format(day_offset)
 tb_log_dir = '../experiments/univ/{}'.format(model_name)
 
 
@@ -20,11 +23,11 @@ def main():
     dataset = pd.read_table(dataset_file)
     train_set, dev_set, test_set = split_train_dataset(dataset)
 
+    # output
+    labels = dataset['sp_label'].values
+
     # input
     embeddings = load_embeddings(train_set['title'].values)
-
-    # output
-    labels = get_labels(dataset, label='sp_label', day_offset=2)
 
     # create model
     model = Sequential()
@@ -47,15 +50,6 @@ def main():
     # evaluate the model
     scores = model.evaluate(dev_set, labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
-
-
-def get_labels(dataset, label, day_offset=0):
-    labels = dataset[label].values
-
-    def day_delta(day):
-        return dt.strptime(day, '%Y-%m-%d') + dt.timedelta(days=day_offset)
-
-    return labels['date'].apply(day_delta)
 
 
 def load_embeddings(headlines):

@@ -4,14 +4,17 @@
 # Date,Title,Hostname,Category,DJIA_Close,SP_Close,Delta_prev,Delta_next
 
 import csv
-import datetime
+from datetime import datetime, date, time, timedelta
 
 data_dir = '../data'
 news_file = '{}/uci-news-aggregator.csv'.format(data_dir)
 djia_file = '{}/DJIA_2014.csv'.format(data_dir)
 sp_file = '{}/SP_2014.csv'.format(data_dir)
+
+day_label_offset = 2
+
 out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"
-out_file = '{}/combined_result.tsv'.format(data_dir)
+out_file = '{}/combined_result_day_offset_{}.tsv'.format(data_dir, day_label_offset)
 
 char_whitelist = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,;\'-:?')
 
@@ -73,6 +76,7 @@ def write_output(rows):
     with open(out_file, 'w') as f:
         for idx, r in enumerate(rows):
             f.write('{}\n'.format('\t'.join(r) if idx != 0 else r))
+    print('Wrote contents to file: {}'.format(out_file))
 
 
 def process_news(existing_dates, djia, sp, row):
@@ -80,18 +84,15 @@ def process_news(existing_dates, djia, sp, row):
     Can return None if not in existing_dates
     """
     id, title, url, publisher, category, story, hostname, timestamp = row
-    date = convert_time(timestamp)
+    dt_date = datetime.fromtimestamp(int(timestamp) / 1000)
+    date = dt_date.strftime('%Y-%m-%d')
+    date_offset = (dt_date + timedelta(days=day_label_offset)).strftime('%Y-%m-%d')
 
-    if date in existing_dates:
-        return date, normalize_headline(title), hostname, category, djia[date]['label'], djia[date]['delta'], sp[date][
-        'label'], sp[date]['delta']
+    if date in existing_dates and date_offset in existing_dates:
+        return date, normalize_headline(title), hostname, category,\
+               djia[date_offset]['label'], djia[date_offset]['delta'], sp[date_offset][ 'label'], sp[date_offset]['delta']
     else:
         return None
-
-
-def convert_time(timestamp):
-    s = int(timestamp) / 1000
-    return datetime.datetime.fromtimestamp(s).strftime('%Y-%m-%d')
 
 
 def normalize_headline(row):
