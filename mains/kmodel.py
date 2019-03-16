@@ -20,6 +20,7 @@ tb_log_dir = '../experiments/univ/{}'.format(model_name)
 
 
 def main():
+    print('Loading dataset: {}'.format(dataset_file))
     dataset = pd.read_table(dataset_file)
     train_set, dev_set, test_set = split_train_dataset(dataset)
 
