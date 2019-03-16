@@ -69,7 +69,7 @@ def load_embeddings(headlines):
 
 
 def fetch_headline_embeddings(headlines):
-    module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/3" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
+    module_url = "https://tfhub.dev/google/universal-sentence-encoder/2" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
     print('Getting Hub Module')
