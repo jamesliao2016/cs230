@@ -25,10 +25,11 @@ def main():
     train_set, dev_set, test_set = split_train_dataset(dataset)
 
     # output
-    labels = dataset['sp_label'].values
+    train_labels = train_set['sp_label'].values
+    dev_labels = dev_set['sp_label'].values
 
     # input
-    embeddings = load_embeddings(train_set['title'].values)
+    train_embeddings = load_embeddings(train_set['title'].values)
 
     # create model
     model = Sequential()
@@ -46,10 +47,10 @@ def main():
     callbacks_list = [checkpoint, tb_callback]
 
     # Fit the model
-    model.fit(embeddings, labels, epochs=200, batch_size=32, callbacks=callbacks_list)
+    model.fit(train_embeddings, train_labels, epochs=200, batch_size=32, callbacks=callbacks_list)
 
     # evaluate the model
-    scores = model.evaluate(dev_set, labels)
+    scores = model.evaluate(dev_set, dev_labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
 

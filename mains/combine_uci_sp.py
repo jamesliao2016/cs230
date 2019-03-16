@@ -88,7 +88,7 @@ def process_news(existing_dates, djia, sp, row):
     date = dt_date.strftime('%Y-%m-%d')
     date_offset = (dt_date + timedelta(days=day_label_offset)).strftime('%Y-%m-%d')
 
-    if date in existing_dates and date_offset in existing_dates:
+    if date_offset in existing_dates:
         return date, normalize_headline(title), hostname, category,\
                djia[date_offset]['label'], djia[date_offset]['delta'], sp[date_offset][ 'label'], sp[date_offset]['delta']
     else:
