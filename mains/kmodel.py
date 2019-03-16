@@ -54,6 +54,11 @@ def main():
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
 
+def split(a, n):
+    k, m = divmod(len(a), n)
+    return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
+
+
 def penalized_loss(noise):
     def loss(y_true, y_pred):
         return K.mean(K.square(y_pred - y_true) - K.square(y_true - noise), axis=-1)
@@ -80,10 +85,14 @@ def fetch_headline_embeddings(headlines):
 
 
 def run_embed(embed, headlines):
-    e = embed(headlines)
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        return session.run(e)
+        chunks = np.array_split(np.asarray(headlines), len(headlines) / 100)
+        return flatten(session.run([embed(c) for c in chunks]))
+
+
+def flatten(list_2d):
+    return [item for sublist in list_2d for item in sublist]
 
 
 def split_train_dataset(dataset):
