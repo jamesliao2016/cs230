@@ -87,12 +87,8 @@ def fetch_headline_embeddings(headlines):
 def run_embed(embed, headlines):
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        chunks = np.array_split(np.asarray(headlines), len(headlines) / 100)
-        return flatten(session.run([embed(c) for c in chunks]))
-
-
-def flatten(list_2d):
-    return [item for sublist in list_2d for item in sublist]
+        reduced = headlines[:len(headlines)/4]
+        return session.run(embed(reduced))
 
 
 def split_train_dataset(dataset):
