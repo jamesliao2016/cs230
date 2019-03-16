@@ -35,8 +35,8 @@ def main():
 
     # create model
     model = Sequential()
-    model.add(Dense(256, input_dim=512, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(128, input_dim=512, activation='relu', bias_initializer='zeros'))
+    model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
 
     # Compile model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
