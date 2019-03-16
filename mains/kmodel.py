@@ -65,10 +65,12 @@ def penalized_loss(noise):
     return loss
 
 
-def load_embeddings(headlines):
+def load_embeddings(headlines, from_file=False):
     print('Loading embeddings...')
+
     # result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
     result = fetch_headline_embeddings(headlines)
+
     print('Finished loading embeddings')
     return result
 
@@ -87,8 +89,7 @@ def fetch_headline_embeddings(headlines):
 def run_embed(embed, headlines):
     with tf.Session() as session:
         session.run([tf.global_variables_initializer(), tf.tables_initializer()])
-        reduced = headlines[:int(len(headlines)/4)]
-        return session.run(embed(reduced))
+        return session.run(embed(headlines))
 
 
 def split_train_dataset(dataset):
