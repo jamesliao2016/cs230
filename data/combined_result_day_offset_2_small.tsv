@@ -1,10 +1,11 @@
-date	title	hostname	category	djia_label	djia_delta	sp_label	sp_delta
-2014-03-10	Fed official says weak data caused by weather, should not slow taper	www.latimes.com	b	1	10.589844	0	-2.049927
-2014-03-10	Fed's Charles Plosser sees high bar for change in pace of tapering	www.livemint.com	b	1	10.589844	0	-2.049927
-2014-03-10	US open: Stocks fall after Fed official hints at accelerated tapering	www.ifamagazine.com	b	1	10.589844	0	-2.049927
-2014-03-10	Fed risks falling 'behind the curve', Charles Plosser says	www.ifamagazine.com	b	1	10.589844	0	-2.049927
-2014-03-10	Fed's Plosser: Nasty Weather Has Curbed Job Growth	www.moneynews.com	b	1	10.589844	0	-2.049927
-2014-03-10	Plosser: Fed May Have to Accelerate Tapering Pace	www.nasdaq.com	b	1	10.589844	0	-2.049927
-2014-03-10	Fed's Plosser: Taper pace may be too slow	www.marketwatch.com	b	1	10.589844	0	-2.049927
-2014-03-10	Fed's Plosser expects US unemployment to fall to 6.2 by the end of 2014	www.fxstreet.com	b	1	10.589844	0	-2.049927
-2014-03-10	US jobs growth last month hit by weather:Fed President Charles Plosser	economictimes.indiatimes.com	b	1	10.589844	0	-2.049927
+date	title	hostname	category	day_label_offset	djia_label	djia_delta	sp_label	sp_delta
+2014-03-10	Fed official says weak data caused by weather, should not slow taper	www.latimes.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Fed's Charles Plosser sees high bar for change in pace of tapering	www.livemint.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	US open: Stocks fall after Fed official hints at accelerated tapering	www.ifamagazine.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Fed risks falling 'behind the curve', Charles Plosser says	www.ifamagazine.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Fed's Plosser: Nasty Weather Has Curbed Job Growth	www.moneynews.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Plosser: Fed May Have to Accelerate Tapering Pace	www.nasdaq.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Fed's Plosser: Taper pace may be too slow	www.marketwatch.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	Fed's Plosser expects US unemployment to fall to 6.2 by the end of 2014	www.fxstreet.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	US jobs growth last month hit by weather:Fed President Charles Plosser	economictimes.indiatimes.com	b	2	1	10.589844	0	-2.049927
+2014-03-10	ECB unlikely to end sterilisation of SMP purchases - traders	www.iii.co.uk	b	2	1	10.589844	0	-2.049927
