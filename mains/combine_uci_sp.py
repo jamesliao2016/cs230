@@ -4,14 +4,20 @@
 # Date,Title,Hostname,Category,DJIA_Close,SP_Close,Delta_prev,Delta_next
 
 import csv
+import argparse
 from datetime import datetime, date, time, timedelta
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--day_label_offset', default=1,
+                    help="Offset the labels by given day num")
 
 data_dir = '../data'
 news_file = '{}/uci-news-aggregator.csv'.format(data_dir)
 djia_file = '{}/DJIA_2014.csv'.format(data_dir)
 sp_file = '{}/SP_2014.csv'.format(data_dir)
 
-day_label_offset = 2
+args = parser.parse_args()
+day_label_offset = args.day_label_offset
 category_whitelist = set('bt')
 
 out_header = "date\ttitle\thostname\tcategory\tdjia_label\tdjia_delta\tsp_label\tsp_delta"

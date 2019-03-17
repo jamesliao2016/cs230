@@ -11,13 +11,13 @@ from keras.callbacks import ModelCheckpoint, TensorBoard
 
 DEBUG = False
 
-day_offset = 1
+day_label_offset = 1
 
 data_dir = '../data'
-dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_offset, '_small' if DEBUG else '')
+dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_label_offset, '_small' if DEBUG else '')
 embeddings_file = '{}/embedding_results{}.csv'.format(data_dir, '_small' if DEBUG else '')
 
-model_name = 'day_offset_{}'.format(day_offset)
+model_name = 'day_offset_{}'.format(day_label_offset)
 tb_log_dir = '../experiments/univ/{}'.format(model_name)
 
 os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
