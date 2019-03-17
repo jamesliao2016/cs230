@@ -2,7 +2,7 @@ import pandas as pd
 
 DEBUG = False
 
-day_label_offset = 1
+day_label_offset = 0
 
 data_dir = '../data'
 dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_label_offset, '_small' if DEBUG else '')

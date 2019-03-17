@@ -8,7 +8,7 @@ import argparse
 from datetime import datetime, date, time, timedelta
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--day_label_offset', default=1,
+parser.add_argument('--day_label_offset', default=0,
                     help="Offset the labels by given day num")
 
 data_dir = '../data'
