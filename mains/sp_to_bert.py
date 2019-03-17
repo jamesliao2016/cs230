@@ -8,7 +8,7 @@ data_dir = '../data'
 dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_label_offset, '_small' if DEBUG else '')
 in_file = '{}/combined_result_day_offset_{}.tsv'.format(data_dir, day_label_offset)
 
-out_dir = '../glue_data/SP'.format(day_label_offset)
+out_dir = '../glue_data/SP'
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
 def write_output(data, filename, is_test=False):
     out_file = '{}/{}'.format(out_dir, filename)
     if is_test:
-        data['title'].rename('sentence').to_frame().to_csv(out_file, sep='\t', index=True)
+        data['title'].rename('sentence').to_frame().to_csv(out_file, sep='\t', index=True, index_label='index')
     else:
         data['title'].rename('sentence').to_frame().join(data['sp_label'].rename('label').to_frame()).to_csv(out_file, sep='\t', index=False)
     print('Wrote contents to file: {}'.format(out_file))
