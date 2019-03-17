@@ -1,3 +1,8 @@
+as other_pred = softmax of day offsets [0..2]
+
+use common MSE error for both
+
+
 What is the impact of this headline that contributes to determine increase of the market? And given a collection of headlines when combined together determines the market increase?
 
 Emb e R^512
