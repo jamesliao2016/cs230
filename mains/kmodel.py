@@ -92,17 +92,5 @@ def run_embed(embed, headlines):
         return session.run(embed(headlines))
 
 
-def split_train_dataset(dataset):
-    shuffled = dataset.sample(frac=1, random_state=7)  # shuffles the ordering of filenames (deterministic given the chosen seed)
-
-    n_d = len(shuffled)
-    split_1 = int(0.8 * n_d)
-    split_2 = int(0.9 * n_d)
-    train = shuffled[:split_1]
-    dev = shuffled[split_1:split_2]
-    test = shuffled[split_2:]
-    return train, dev, test
-
-
 if __name__ == '__main__':
     main()
