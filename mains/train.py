@@ -11,7 +11,7 @@ from keras.callbacks import ModelCheckpoint, TensorBoard
 
 DEBUG = False
 
-day_offset = 2
+day_offset = 1
 
 data_dir = '../data'
 dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_offset, '_small' if DEBUG else '')
