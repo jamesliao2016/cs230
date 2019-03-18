@@ -11,6 +11,7 @@ from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D, Embedding, LSTM, 
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from gensim.models.keyedvectors import KeyedVectors
 from keras.preprocessing.text import Tokenizer
+from keras import regularizers
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
 
@@ -24,11 +25,14 @@ parser.add_argument('--day_offset', default=0,
 parser.add_argument('--data_dir', default='../data',
                     help="Directory where to find the data file")
 parser.add_argument('--batch_size', default=32,
-                    help="Directory where to find the data file")
+                    help="Batch size")
+parser.add_argument('--lambd', default=1e-3,
+                    help="L2 regularization term")
 
 args = parser.parse_args()
 
-dataset_file = '{}/combined_result_day_offset_{}.tsv'.format(args.data_dir, args.day_offset)
+pretrained_w2v_file = '{}/GoogleNews-vectors-negative300.bin'.format(args.data_dir)
+train_file = '{}/combined_result_day_offset_{}.tsv'.format(args.data_dir, args.day_offset)
 tb_log_dir = '../experiments/{}'.format(args.model_name)
 
 
@@ -39,24 +43,22 @@ def main():
     headlines = dataset['title'].values
     labels = dataset['sp_label'].values
 
-    # checkpoint
-    filepath = "weights.best.hdf5"
-    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+    checkpoint = ModelCheckpoint(filepath="weights.best.hdf5", monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
     model = create_model(headlines, embed_type=args.embed_type)
 
     # Fit the model
-    model.fit(headlines, labels, epochs=200, batch_size=args.batch_size, callbacks=[checkpoint, tb_callback])
+    model.fit(X_train, y_train, epochs=200, batch_size=args.batch_size, callbacks=[checkpoint, tb_callback])
 
     # evaluate the model
-    scores = model.evaluate(headlines, labels)
+    scores = model.evaluate(X_eval, y_eval)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
 
 def create_model(headlines, embed_type='word'):
     def setup_word_model():
-        word_vectors = KeyedVectors.load_word2vec_format('../GoogleNews-vectors-negative300.bin', binary=True)
+        word_vectors = KeyedVectors.load_word2vec_format(pretrained_w2v_file, binary=True)
 
         NUM_WORDS = 20000
         tokenizer = Tokenizer(num_words=NUM_WORDS, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n\'',
@@ -108,7 +110,7 @@ def create_model(headlines, embed_type='word'):
         flatten = Flatten()(merged_tensor)
         reshape = Reshape((3 * num_filters,))(flatten)
         dropout = Dropout(drop)(flatten)
-        output = Dense(units=3, activation='softmax', kernel_regularizer=regularizers.l2(0.01))(dropout)
+        output = Dense(units=3, activation='softmax', kernel_regularizer=regularizers.l2(args.lambd))(dropout)
 
         # this creates a model that includes
         model = Model(inputs, output)
@@ -118,7 +120,8 @@ def create_model(headlines, embed_type='word'):
     def setup_sentence_model():
         embeddings = get_sentence_embeddings(headlines)
         model = Sequential()
-        model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros'))
+        model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros', kernel_regularizer=regularizers.l2(args.lambd)))
+        model.add(Dropout(0.25))
         model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
         return model, embeddings
