@@ -1,5 +1,5 @@
-import gensim
 import os
+import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -7,11 +7,12 @@ import keras_metrics as km
 import argparse
 
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D, Embedding, LSTM, Activation
+from keras.layers import Input, Dense, Dropout, Conv1D, MaxPooling1D, Embedding, LSTM, Activation, Reshape, Conv2D, \
+    MaxPooling2D, concatenate, Flatten
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from gensim.models.keyedvectors import KeyedVectors
 from keras.preprocessing.text import Tokenizer
-from keras import regularizers
+from keras import regularizers, Model
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
 
@@ -26,7 +27,7 @@ parser.add_argument('--data_dir', default='../data',
                     help="Directory where to find data file")
 parser.add_argument('--glue_data_dir', default='../glue_data',
                     help="Directory where to find train dev test files")
-parser.add_argument('--batch_size', default=32,
+parser.add_argument('--batch_size', default=64,
                     help="Batch size")
 parser.add_argument('--lambd', default=1e-3,
                     help="L2 regularization term")
@@ -43,64 +44,53 @@ def main():
     train_set = pd.read_table(train_file)
     eval_set = pd.read_table(eval_file)
 
-    X_train = train_set['title'].values
-    y_train = train_set['sp_label'].values
-    assert X_train.shape == y_train.shape
+    headlines_train = train_set['title'].values
+    labels_train = train_set['sp_label'].values
+    assert headlines_train.shape == labels_train.shape
 
-    X_eval = eval_set['title'].values
-    y_eval = eval_set['sp_label'].values
-    assert X_eval.shape == y_eval.shape
+    headlines_eval = eval_set['title'].values
+    labels_eval = eval_set['sp_label'].values
+    assert headlines_eval.shape == labels_eval.shape
 
     checkpoint = ModelCheckpoint(filepath="weights.best.hdf5", monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-    model = create_model(X_train, embed_type=args.embed_type)
-
-    # Fit the model
-    model.fit(X_train, y_train, epochs=200, batch_size=args.batch_size, callbacks=[checkpoint, tb_callback])
-
-    # evaluate the model
-    scores = model.evaluate(X_eval, y_eval)
-    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+    model = create_model(headlines_train, headlines_eval, labels_train, labels_eval, embed_type=args.embed_type, callbacks=[checkpoint, tb_callback])
 
 
-def create_model(headlines, embed_type):
+def create_model(headlines_train, headlines_eval, labels_train, labels_eval, embed_type, callbacks):
     def setup_word_model():
         word_vectors = KeyedVectors.load_word2vec_format(pretrained_w2v_file, binary=True)
 
         NUM_WORDS = 20000
         tokenizer = Tokenizer(num_words=NUM_WORDS, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n\'',
                               lower=True)
-        tokenizer.fit_on_texts(texts)
-        sequences_train = tokenizer.texts_to_sequences(texts)
-        sequences_valid = tokenizer.texts_to_sequences(val_data.text)
+        tokenizer.fit_on_texts(headlines_train)
+        sequences_train = tokenizer.texts_to_sequences(headlines_train)
+        sequences_valid = tokenizer.texts_to_sequences(headlines_eval.text)
         word_index = tokenizer.word_index
 
+        X_train = pad_sequences(sequences_train)
+        X_eval = pad_sequences(sequences_valid, maxlen=X_train.shape[1])
+
         EMBEDDING_DIM = 300
-        vocabulary_size = 20000
-        embedding_matrix = np.zeros((vocabulary_size, EMBEDDING_DIM))
+        embedding_matrix = np.zeros((NUM_WORDS, EMBEDDING_DIM))
         for word, i in word_index.items():
-            if i >= vocabulary_size:
+            if i >= NUM_WORDS:
                 break
             try:
-                embedding_vector = word_vectors[word]
-                embedding_matrix[i] = embedding_vector
+                embedding_matrix[i] = word_vectors[word]
             except KeyError:
                 embedding_matrix[i] = np.random.normal(0, np.sqrt(0.25), EMBEDDING_DIM)
 
-        del (word_vectors)
+        del word_vectors
 
-        from keras.layers import Embedding
-        embedding_layer = Embedding(vocabulary_size,
-                                    EMBEDDING_DIM,
-                                    weights=[embedding_matrix],
-                                    trainable=True)
         sequence_length = X_train.shape[1]
         filter_sizes = [3, 4, 5]
         num_filters = 100
         drop = 0.5
         inputs = Input(shape=(sequence_length,))
-        embedding = embedding_layer(inputs)
+        embedding = Embedding(NUM_WORDS, EMBEDDING_DIM, weights=[embedding_matrix], trainable=True)(inputs)
         reshape = Reshape((sequence_length, EMBEDDING_DIM, 1))(embedding)
 
         conv_0 = Conv2D(num_filters, (filter_sizes[0], EMBEDDING_DIM), activation='relu',
@@ -117,22 +107,28 @@ def create_model(headlines, embed_type):
         merged_tensor = concatenate([maxpool_0, maxpool_1, maxpool_2], axis=1)
         flatten = Flatten()(merged_tensor)
         reshape = Reshape((3 * num_filters,))(flatten)
-        dropout = Dropout(drop)(flatten)
-        output = Dense(units=3, activation='softmax', kernel_regularizer=regularizers.l2(args.lambd))(dropout)
+        dropout = Dropout(drop)(reshape)
+        output = Dense(1, activation='sigmoid', bias_initializer='zeros', kernel_regularizer=regularizers.l2(args.lambd))(dropout)
 
         # this creates a model that includes
         model = Model(inputs, output)
 
+        # Fit the model
+        model.fit(X_train, labels_train, epochs=200, batch_size=args.batch_size, callbacks=callbacks, validation_data=(X_eval, labels_eval))
+
         return model
 
     def setup_sentence_model():
-        embeddings = get_sentence_embeddings(headlines)
+        X_train = get_sentence_embeddings(headlines_train)
+        X_eval = get_sentence_embeddings(headlines_eval)
         model = Sequential()
         model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros', kernel_regularizer=regularizers.l2(args.lambd)))
         model.add(Dropout(0.25))
         model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
-        return model, embeddings
+        # Fit the model
+        model.fit(X_train, labels_train, epochs=200, batch_size=args.batch_size, callbacks=callbacks, validation_data=(X_eval, labels_eval))
+        return model
 
     return setup_word_model() if embed_type == 'word' else setup_sentence_model()
 
