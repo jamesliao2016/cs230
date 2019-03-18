@@ -1,23 +1,24 @@
+import gensim
 import os
-import numpy as np
 import pandas as pd
 import tensorflow as tf
 import tensorflow_hub as hub
 import keras.backend as K
+import keras_metrics as km
 
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D
+from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D, Embedding, LSTM, Activation
 from keras.callbacks import ModelCheckpoint, TensorBoard
 
 DEBUG = False
 
-day_label_offset = 0
+day_offset = 2
 
 data_dir = '../data'
-dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_label_offset, '_small' if DEBUG else '')
+dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_offset, '_small' if DEBUG else '')
 embeddings_file = '{}/embedding_results{}.csv'.format(data_dir, '_small' if DEBUG else '')
 
-model_name = 'day_offset_{}'.format(day_label_offset)
+model_name = 'day_offset_{}'.format(day_offset)
 tb_log_dir = '../experiments/univ/{}'.format(model_name)
 
 os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
@@ -29,29 +30,51 @@ def main():
 
     headlines = dataset['title'].values
     labels = dataset['sp_label'].values
-    deltas = dataset['sp_delta'].values
-    embeddings = load_embeddings(headlines) * np.tanh(deltas)
-
-    # create model
-    model = Sequential()
-    model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros'))
-    model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
-
-    # Compile model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # checkpoint
     filepath = "weights.best.hdf5"
     checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
+    model, y_pred = create_model(headlines, embed_type='word')
+
     # Fit the model
-    model.fit(embeddings, labels, validation_split=0.2, epochs=200, batch_size=32, callbacks=callbacks_list)
+    model.fit(y_pred, labels, validation_split=0.2, epochs=200, batch_size=32, callbacks=[checkpoint, tb_callback])
 
     # evaluate the model
-    scores = model.evaluate(embeddings, labels)
+    scores = model.evaluate(y_pred, labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
+
+class WordModel:
+    def __init__(self, headlines):
+        self.headlines = headlines
+
+
+def create_model(headlines, embed_type='word'):
+    def setup_word_model():
+        sentences = [[w for w in h.lower().split()] for h in headlines]
+        word_model = gensim.models.Word2Vec(sentences, size=100, min_count=1, window=5, iter=100)
+        pretrained_weights = word_model.wv.syn0
+        vocab_size, emdedding_size = pretrained_weights.shape
+
+        model = Sequential()
+        model.add(Embedding(input_dim=vocab_size, output_dim=emdedding_size, weights=[pretrained_weights]))
+        model.add(LSTM(units=emdedding_size))
+        model.add(Dense(units=vocab_size, activation='softmax'))
+        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
+
+        return model, pretrained_weights
+
+    def setup_sentence_model():
+        embeddings = get_sentence_embeddings(headlines)
+        model = Sequential()
+        model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros'))
+        model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
+        return model
+
+    return setup_word_model() if embed_type == 'word' else setup_sentence_model()
 
 
 def penalized_loss(noise):
@@ -60,17 +83,7 @@ def penalized_loss(noise):
     return loss
 
 
-def load_embeddings(headlines, from_file=False):
-    print('Loading embeddings...')
-
-    # result = np.loadtxt(embeddings_file, dtype=np.float32, delimiter=', ')
-    result = fetch_headline_embeddings(headlines)
-
-    print('Finished loading embeddings')
-    return result
-
-
-def fetch_headline_embeddings(headlines):
+def get_sentence_embeddings(headlines):
     module_url = "https://tfhub.dev/google/universal-sentence-encoder-large/3" #@param ["https://tfhub.dev/google/universal-sentence-encoder/2", "https://tfhub.dev/google/universal-sentence-encoder-large/3"]
 
     # Import the Universal Sentence Encoder's TF Hub module
