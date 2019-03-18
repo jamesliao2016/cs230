@@ -72,7 +72,7 @@ def create_model(headlines, embed_type='word'):
         model.add(Dense(256, input_dim=512, activation='relu', bias_initializer='zeros'))
         model.add(Dense(1, activation='sigmoid', bias_initializer='zeros'))
         model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
-        return model
+        return model, embeddings
 
     return setup_word_model() if embed_type == 'word' else setup_sentence_model()
 
