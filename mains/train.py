@@ -9,6 +9,7 @@ import keras_metrics as km
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Conv1D, MaxPooling1D, Embedding, LSTM, Activation
 from keras.callbacks import ModelCheckpoint, TensorBoard
+from gensim.models.keyedvectors import KeyedVectors
 
 DEBUG = False
 
@@ -16,12 +17,9 @@ day_offset = 2
 
 data_dir = '../data'
 dataset_file = '{}/combined_result_day_offset_{}{}.tsv'.format(data_dir, day_offset, '_small' if DEBUG else '')
-embeddings_file = '{}/embedding_results{}.csv'.format(data_dir, '_small' if DEBUG else '')
 
-model_name = 'day_offset_{}'.format(day_offset)
-tb_log_dir = '../experiments/univ/{}'.format(model_name)
-
-os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
+model_name = 'w2v/day_offset_{}'.format(day_offset)
+tb_log_dir = '../experiments/{}'.format(model_name)
 
 
 def main():
@@ -54,6 +52,10 @@ class WordModel:
 def create_model(headlines, embed_type='word'):
     def setup_word_model():
         sentences = [[w for w in h.lower().split()] for h in headlines]
+
+        # TODO: google word2vec
+        # word_vectors = KeyedVectors.load_word2vec_format('../GoogleNews-vectors-negative300.bin', binary=True)
+
         word_model = gensim.models.Word2Vec(sentences, size=100, min_count=1, window=5, iter=100)
         pretrained_weights = word_model.wv.syn0
         vocab_size, emdedding_size = pretrained_weights.shape
@@ -88,6 +90,7 @@ def get_sentence_embeddings(headlines):
 
     # Import the Universal Sentence Encoder's TF Hub module
     print('Getting Hub Module')
+    os.environ['TFHUB_CACHE_DIR'] = '/home/ubuntu/cs230-final-ralmodov/tf_cache'
     embed = hub.Module(module_url)
     print('Finished getting Hub Module')
 
