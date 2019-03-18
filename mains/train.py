@@ -23,7 +23,9 @@ parser.add_argument('--model_name', default='w2v',
 parser.add_argument('--day_offset', default=0,
                     help="Offset the labels by given day num")
 parser.add_argument('--data_dir', default='../data',
-                    help="Directory where to find the data file")
+                    help="Directory where to find data file")
+parser.add_argument('--glue_data_dir', default='../glue_data',
+                    help="Directory where to find train dev test files")
 parser.add_argument('--batch_size', default=32,
                     help="Batch size")
 parser.add_argument('--lambd', default=1e-3,
@@ -32,12 +34,12 @@ parser.add_argument('--lambd', default=1e-3,
 args = parser.parse_args()
 
 pretrained_w2v_file = '{}/GoogleNews-vectors-negative300.bin'.format(args.data_dir)
-train_file = '{}/combined_result_day_offset_{}.tsv'.format(args.data_dir, args.day_offset)
+train_file = '{}/SP_day_offset_{}/train.tsv'.format(args.glue_data_dir, args.day_offset)
+eval_file = '{}/SP_day_offset_{}/eval.tsv'.format(args.glue_data_dir, args.day_offset)
 tb_log_dir = '../experiments/{}'.format(args.model_name)
 
 
 def main():
-    print('Loading dataset: {}'.format(dataset_file))
     dataset = pd.read_table(dataset_file)
 
     headlines = dataset['title'].values
