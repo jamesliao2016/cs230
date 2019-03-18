@@ -15,11 +15,15 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--embed_type', default='word',
+                    help="'word' or 'sentence' for embedding type")
 parser.add_argument('--model_name', default='w2v',
                     help="Name of the model")
 parser.add_argument('--day_offset', default=0,
                     help="Offset the labels by given day num")
 parser.add_argument('--data_dir', default='../data',
+                    help="Directory where to find the data file")
+parser.add_argument('--batch_size', default=32,
                     help="Directory where to find the data file")
 
 args = parser.parse_args()
@@ -40,19 +44,14 @@ def main():
     checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-    model = create_model(headlines, embed_type='word')
+    model = create_model(headlines, embed_type=args.embed_type)
 
     # Fit the model
-    model.fit(headlines, labels, validation_split=0.2, epochs=200, batch_size=32, callbacks=[checkpoint, tb_callback])
+    model.fit(headlines, labels, epochs=200, batch_size=args.batch_size, callbacks=[checkpoint, tb_callback])
 
     # evaluate the model
     scores = model.evaluate(headlines, labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
-
-
-class WordModel:
-    def __init__(self, headlines):
-        self.headlines = headlines
 
 
 def create_model(headlines, embed_type='word'):
