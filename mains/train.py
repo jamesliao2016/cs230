@@ -29,7 +29,8 @@ def main():
 
     headlines = dataset['title'].values
     labels = dataset['sp_label'].values
-    embeddings = load_embeddings(headlines)
+    deltas = dataset['sp_delta'].values
+    embeddings = load_embeddings(headlines) * np.tanh(deltas)
 
     # create model
     model = Sequential()
@@ -44,8 +45,6 @@ def main():
     checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-    callbacks_list = [checkpoint, tb_callback]
-
     # Fit the model
     model.fit(embeddings, labels, validation_split=0.2, epochs=200, batch_size=32, callbacks=callbacks_list)
 
@@ -53,10 +52,6 @@ def main():
     scores = model.evaluate(embeddings, labels)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
-
-def split(a, n):
-    k, m = divmod(len(a), n)
-    return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
 
 
 def penalized_loss(noise):
