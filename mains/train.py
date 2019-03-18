@@ -40,15 +40,21 @@ tb_log_dir = '../experiments/{}'.format(args.model_name)
 
 
 def main():
-    dataset = pd.read_table(dataset_file)
+    train_set = pd.read_table(train_file)
+    eval_set = pd.read_table(eval_file)
 
-    headlines = dataset['title'].values
-    labels = dataset['sp_label'].values
+    X_train = train_set['title'].values
+    y_train = train_set['sp_label'].values
+    assert X_train.shape == y_train.shape
+
+    X_eval = eval_set['title'].values
+    y_eval = eval_set['sp_label'].values
+    assert X_eval.shape == y_eval.shape
 
     checkpoint = ModelCheckpoint(filepath="weights.best.hdf5", monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
-    model = create_model(headlines, embed_type=args.embed_type)
+    model = create_model(X_train, embed_type=args.embed_type)
 
     # Fit the model
     model.fit(X_train, y_train, epochs=200, batch_size=args.batch_size, callbacks=[checkpoint, tb_callback])
@@ -58,7 +64,7 @@ def main():
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
 
 
-def create_model(headlines, embed_type='word'):
+def create_model(headlines, embed_type):
     def setup_word_model():
         word_vectors = KeyedVectors.load_word2vec_format(pretrained_w2v_file, binary=True)
 
