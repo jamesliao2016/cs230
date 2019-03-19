@@ -67,7 +67,7 @@ def create_model(headlines_train, headlines_eval, labels_train, labels_eval, emb
                               lower=True)
         tokenizer.fit_on_texts(headlines_train)
         sequences_train = tokenizer.texts_to_sequences(headlines_train)
-        sequences_valid = tokenizer.texts_to_sequences(headlines_eval.text)
+        sequences_valid = tokenizer.texts_to_sequences(headlines_eval)
         word_index = tokenizer.word_index
 
         X_train = pad_sequences(sequences_train)
