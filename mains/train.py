@@ -113,6 +113,8 @@ def create_model(headlines_train, headlines_eval, labels_train, labels_eval, emb
         # this creates a model that includes
         model = Model(inputs, output)
 
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy', km.binary_precision(), km.binary_recall()])
+
         # Fit the model
         model.fit(X_train, labels_train, epochs=200, batch_size=args.batch_size, callbacks=callbacks, validation_data=(X_eval, labels_eval))
 
