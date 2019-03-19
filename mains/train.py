@@ -44,12 +44,12 @@ def main():
     train_set = pd.read_table(train_file)
     eval_set = pd.read_table(eval_file)
 
-    headlines_train = train_set['title'].values
-    labels_train = train_set['sp_label'].values
+    headlines_train = train_set['sentence'].values
+    labels_train = train_set['label'].values
     assert headlines_train.shape == labels_train.shape
 
-    headlines_eval = eval_set['title'].values
-    labels_eval = eval_set['sp_label'].values
+    headlines_eval = eval_set['sentence'].values
+    labels_eval = eval_set['label'].values
     assert headlines_eval.shape == labels_eval.shape
 
     checkpoint = ModelCheckpoint(filepath="weights.best.hdf5", monitor='val_acc', verbose=1, save_best_only=True, mode='max')
