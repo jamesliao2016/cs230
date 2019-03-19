@@ -36,7 +36,7 @@ args = parser.parse_args()
 
 pretrained_w2v_file = '{}/GoogleNews-vectors-negative300.bin'.format(args.data_dir)
 train_file = '{}/SP_day_offset_{}/train.tsv'.format(args.glue_data_dir, args.day_offset)
-eval_file = '{}/SP_day_offset_{}/eval.tsv'.format(args.glue_data_dir, args.day_offset)
+eval_file = '{}/SP_day_offset_{}/dev.tsv'.format(args.glue_data_dir, args.day_offset)
 tb_log_dir = '../experiments/{}'.format(args.model_name)
 
 
