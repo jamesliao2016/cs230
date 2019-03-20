@@ -27,16 +27,19 @@ parser.add_argument('--data_dir', default='../data',
                     help="Directory where to find data file")
 parser.add_argument('--glue_data_dir', default='../glue_data',
                     help="Directory where to find train dev test files")
-parser.add_argument('--batch_size', default=64,
+parser.add_argument('--batch_size', default=64, type=int,
                     help="Batch size")
-parser.add_argument('--lambd', default=1e-3,
+parser.add_argument('--lambd', default=1e-3, type=float,
                     help="L2 regularization term")
+parser.add_argument('--do_predict', default=False, type=bool,
+                    help="Run prediction")
 
 args = parser.parse_args()
 
 pretrained_w2v_file = '{}/GoogleNews-vectors-negative300.bin'.format(args.data_dir)
 train_file = '{}/SP_day_offset_{}/train.tsv'.format(args.glue_data_dir, args.day_offset)
 eval_file = '{}/SP_day_offset_{}/dev.tsv'.format(args.glue_data_dir, args.day_offset)
+test_file = '{}/SP_day_offset_{}/test.tsv'.format(args.glue_data_dir, args.day_offset)
 tb_log_dir = '../experiments/{}'.format(args.model_name)
 
 
@@ -56,6 +59,9 @@ def main():
     tb_callback = TensorBoard(log_dir=tb_log_dir, histogram_freq=0, write_graph=True, write_images=True)
 
     model = create_model(headlines_train, headlines_eval, labels_train, labels_eval, embed_type=args.embed_type, callbacks=[checkpoint, tb_callback])
+
+    if args.do_predict:
+        model.predict(pd.read_table(test_file)['sentence'].values)
 
 
 def create_model(headlines_train, headlines_eval, labels_train, labels_eval, embed_type, callbacks):
